@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Navbar</title>
+</head>
+<body>
+    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+        <div class="container-fluid" style="padding: 0px;">
+            <div class="row myNavbar" style="padding: 0px; width: 100.65%">
+                <div class="col-1"></div>   <!-- Отступ слева -->
+                <!-- Лейбл -->
+                <div class="col-1">
+                    <img class="logoImg" th:src="@{images/books.png}" dataURI="true"/>
+                </div>
+                <div class="col-3"></div>   <!-- Отступ между лейблом и языками -->
+                <!-- Языки -->
+                <div class="col-2">
+                    <div class="container langButtonContainer">
+                        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                            <button type="button" class="btn btn-dark navButton">Рус</button>
+                            <button type="button" class="btn btn-dark navButton">Анг</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Поиск -->
+                <div class="col-2">
+                    <form class="d-flex" th:method="GET" th:action="@{/main_search}">
+                        <input class="form-control me-2 myNavbarSearch" type="search" placeholder="Поиск" name="keywords">
+                        <input type="hidden" name="type" value="keywords">
+                    </form>
+                </div>
+                <!-- Текущий пользователь -->
+                <div class="col-2">
+                    <div class="container logButtonContainer">
+                        <button type="button" class="btn btn-dark navButton myNavbarUserButton">Добро пожаловать: user</button>
+                    </div>
+                </div>
+                <!-- Выход -->
+                <div class="col-1">
+                    <div class="container logButtonContainer">
+                        <button type="button" class="btn btn-dark navButton myNavbarExitButton">Выйти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

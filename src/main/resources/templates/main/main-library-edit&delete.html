@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit&Delete</title>
+</head>
+<body>
+
+    <div th:fragment="main">
+
+        <!-- Buttons -->
+        <div class="row">
+            <div class="col" style="text-align: right;">
+                <input type="image" src="images/edit.png" class="myBookCardEditButton" data-bs-toggle="modal" th:attr="data-bs-target='#EditBook№' + ${book.getId}">
+                <input type="image" src="images/delete.png" class="myBookCardDeleteButton">
+            </div>
+        </div>
+
+
+        <!-- Modal window -->
+        <div class="modal fade" th:attr="id='EditBook№' + ${book.getId}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-show="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <a th:name="'ModalWindow' + ${book.getId}"></a>
+                    <a th:name="${book.getId}"></a>
+                    <!-- Заголовок -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="${book.getName}">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- Содержание -->
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                <!-- Левая колонка (обложка и всплывающие собщения) -->
+                                <div class="col-4" style="box-shadow: inset -1px 0 0 gray; padding: 0 2.5% 0 1%;">
+                                    <div class="row">
+                                        <div class="container-fluid">
+
+                                            <!-- Обложка -->
+                                            <div class="row">
+                                                <img th:src="'http://localhost:8080/img?id=' + ${book.getId()}">
+                                            </div>
+                                            <!-- Загрузка -->
+                                            <div class="row">
+                                                <button type="button" class="btn downloadButton custom-file-input">
+                                                    <img src="images/addImg.png" style="width: 1.1vw;">
+                                                    Загрузить
+                                                </button>
+                                                <div class="container-fluid downloadButtonArea">
+                                                    <input type="file" class="custom-file-input" id="customFileLang" lang="es" hidden>
+                                                    <label class="custom-file-label" for="customFileLang" style="margin-top: 2%; width: 100%;">Выберите файл ...</label>
+                                                </div>
+                                            </div>
+                                            <!-- Сообщения об ошибках -->
+                                            <div class="row">
+                                                <div class="container-fluid" style="margin-top: 5%;">
+                                                    <div th:each="err : ${errors}">
+                                                        <p th:text="${err}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Правая колонка (поля, которые надо заполнить) -->
+                                <div class="col-8">
+                                    <form th:method="POST" th:action="@{/books/{id} (id=${book.getId()})}" th:object="${BookModel}" th:id="'BookEditForm' + ${book.getName}">
+                                        <input type="hidden" name="_method" value="patch">
+                                        <div class="row">
+                                            <label for="name" class="form-label editFieldLabel">Название</label>
+                                            <input type="text" class="form-control editFieldInput" id="name" name="name" th:value="${book.getName}">
+                                        </div>
+                                        <!-- Author -->
+                                        <div class="row">
+                                            <label for="author" class="form-label editFieldLabel">Автор</label>
+                                            <select class="form-select editFieldInput" id="author" name="author" aria-describedby="validationServer04Feedback" required>
+                                                <option selected style="display: none;">
+                                                    <th:block th:text="${book.getAuthor}"></th:block>
+                                                </option>
+                                                <th:block th:each="author : ${allAuthors}">
+                                                    <option><th:block th:text="${author}"></th:block></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <!-- Genre -->
+                                        <div class="row">
+                                            <label for="genre" class="form-label editFieldLabel">Жанр</label>
+                                            <select class="form-select editFieldInput" id="genre" name="genre" aria-describedby="validationServer04Feedback" required>
+                                                <option selected style="display: none;">
+                                                    <th:block th:text="${book.getGenre}"></th:block>
+                                                </option>
+                                                <th:block th:each="genre : ${allGenres}">
+                                                    <option><th:block th:text="${genre}"></th:block></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <!-- Publisher -->
+                                        <div class="row">
+                                            <label for="publisher" class="form-label editFieldLabel">Издатель</label>
+                                            <select class="form-select editFieldInput" id="publisher" name="publisher" aria-describedby="validationServer04Feedback" required>
+                                                <option selected style="display: none;">
+                                                    <th:block th:text="${book.getPublisher}"></th:block>
+                                                </option>
+                                                <th:block th:each="publisher : ${allPublishers}">
+                                                    <option><th:block th:text="${publisher}"></th:block></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <!-- ISBN -->
+                                        <div class="row">
+                                            <label for="isbn" class="form-label editFieldLabel">ISBN</label>
+                                            <input type="text" class="form-control editFieldInput" id="isbn" name="isbn" th:value="${book.getIsbn}">
+                                        </div>
+                                        <!-- PublishYear -->
+                                        <div class="row">
+                                            <label for="publishYear" class="form-label editFieldLabel">Год</label>
+                                            <input type="text" class="form-control editFieldInput" id="publishYear" name="publishYear" th:value="${book.getPublishYear}">
+                                        </div>
+                                        <!-- PageCount -->
+                                        <div class="row">
+                                            <label for="page_count" class="form-label editFieldLabel">Кол-во страниц</label>
+                                            <input type="text" class="form-control editFieldInput" id="page_count" name="pageCount" th:value="*{pageCount}">
+                                        </div>
+                                        <!-- Content -->
+                                        <div class="row">
+                                            <label class="form-label editFieldLabel" style="margin-top: 4%;">Контент</label>
+                                            <div style="margin-left: auto; width: 65%; margin-right: -5%;">
+                                                <button type="button" class="btn downloadButton">
+                                                    <img src="images/addPDF.png" style="width: 1.1vw;">
+                                                    Загрузить
+                                                </button>
+                                                <div class="container-fluid downloadButtonArea" style="margin: 0;">
+                                                    <input type="file" class="custom-file-input" id="customFileLang" lang="es" hidden>
+                                                    <label class="custom-file-label" for="customFileLang" style="margin-top: 2%; width: 115%; margin-left: -5%;">Выберите файл ...</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Description -->
+                                        <div class="row">
+                                            <label for="description" class="form-label editFieldLabel" style="margin-top: 4%;">Описание</label>
+                                            <textarea type="text" class="form-control editFieldInput" id="description" name="description" th:value="${book.getDescription}" style="height: 5vw; resize: none;"></textarea>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Футер -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  style="margin-right: 1%;">Отмена</button>
+                        <button type="submit" th:form="'BookEditForm' + ${book.getName}" class="btn btn-primary" style="margin-right: 4%;">Сохранить</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+.topContainer {
+    width: 100%;
+    background-image: url("../images/bg.jpg");
+
+}
+
+.capHorizontalSpace {
+    height: 45px;
+}
+
+.topBookContainer {
+    width: 100%;
+    height: 100%;
+    margin-bottom: -9%;
+}
+
+.imgContainer {
+    width: 18%;
+    height: 100%;
+    position: relative;
+    z-index: 3;
+    margin-left: -2.2%;
+}
+
+.bookTopImg {
+    height: 100%;
+    width: 100%;
+}
+
+.booksTopRow {
+    height: 100%;
+    margin-left: 8%;
+}
+
+.rowImg {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    margin-top: -0.8%;
+}
+
+.shadow {
+    width: 18%;
+    height: 84.2%;
+    position: relative;
+    z-index: 2;
+    margin-left: -15%;
+    margin-bottom: -1%;
+    margin-top: 4.5%;
+}

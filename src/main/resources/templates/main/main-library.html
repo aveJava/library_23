@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+</head>
+<body>
+    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+        <div class="container-fluid mainContainer">
+            <div class="row" style="height: 40px"></div>     <!-- Верхний отступ -->
+            <div class="row">
+                <div class="col-1"></div>           <!-- Левый отступ -->
+
+
+                <!-- Жанры -->
+                <div class="col-2">
+                    <div class="container-fluid genreContainer">
+                        <!-- Шапка -->
+                        <a class="row myTab header genreButton" th:href="@{/main_search(type='all')}">
+                            Все жанры
+                        </a>
+                        <!-- Список жанров -->
+                        <th:block th:each="genre : ${allGenres}">
+                            <a class="row myTab genreButton" th:href="@{/main_search(type='genre', genreId=${genre.getId})}">
+                                <th:block th:text="${genre.getName()}"></th:block>
+                            </a>
+                        </th:block>
+                    </div>
+                </div>
+
+
+                <!-- Библиотека -->
+                <div class="col-8">
+                    <div th:insert="~{main/main-library-books_container :: main}"></div>
+                </div>
+
+
+                <div class="col-1"></div>           <!-- Правый отступ -->
+            </div>
+            <div class="row" style="height: 40px"></div>     <!-- Нижний отступ -->
+        </div>
+
+    </div>
+</body>
+</html>

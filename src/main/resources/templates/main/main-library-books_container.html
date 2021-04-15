@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BooksContainer</title>
+</head>
+<body>
+    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+        <div class="container-fluid libraryContainer">
+
+            <!-- Шапка -->
+            <div class="row myTab header">
+                <th:block th:text="${SearchMessage}"></th:block>
+            </div>
+
+            <!-- Книги -->
+            <div class="booksContainer">
+                <div class="row" style="height: 0.7vw"></div>   <!-- Верхний отступ контейнера книг -->
+                <div class="row" style="margin: 0% 1%">
+                    <th:block th:each="book : ${pageBooks}">
+
+                        <!-- Карточка книги -->
+                        <div class="card myBookCard">
+                            <img th:src="'http://localhost:8080/img?id=' + ${book.getId()}" class="myBookCardImage">
+                            <div class="card-body" style="padding: 0.2vw 0.5vw;">
+
+                                <!-- ФИО автора -->
+                                <div class="row" style="height: 2.6vw;">
+                                    <p th:text="${book.getAuthor.getFio}" style="font-size: 0.85vw;"></p>
+                                </div>
+
+                                <!-- Просмотры и рейтинг -->
+                                <div class="row">
+                                    <div class="col-4" style="padding-right: 0;">
+                                        <div>
+                                            <img th:src="@{images/see.png}" style="height: 1.3vw;">
+                                            <div style="display: inline-block; font-size: 0.7vw;">
+                                                <th:block th:text="${book.getViewCount}"></th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-8" style="padding: 0 0 0 0.5vw; margin-top: -0.15vw;">
+                                        <fieldset class="rating">
+                                            <label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                                            <input type="radio" id="star5" name="rating" value="5" />
+
+                                            <label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" id="star4" name="rating" value="4" />
+
+                                            <label class = "full" for="star3" title="Meh - 3 stars"></label>
+                                            <input type="radio" id="star3" name="rating" value="3" />
+
+                                            <label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" id="star2" name="rating" value="2" />
+
+                                            <label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                                            <input type="radio" id="star1" name="rating" value="1" />
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <!-- Редактирование и удаление -->
+                                <div th:insert="~{main/main-library-edit&delete :: main}"></div>
+
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="row" style="height: 0.7vw"></div>   <!-- Нижний отступ контейнера книг -->
+            </div>
+
+            <!-- Toolbar -->
+            <div th:insert="~{main/main-library-toolbar :: main}"></div>
+
+        </div>
+
+    </div>
+</body>
+</html>

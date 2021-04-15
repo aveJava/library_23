@@ -1,0 +1,51 @@
+.myNavbar {
+    display: flex;
+    background-color: #1f1f1f;
+    height: 50px
+}
+
+.logoImg {
+    height:50px;
+    padding:10px;
+    margin-left: 40%;
+}
+
+.langButtonContainer {
+    height: 100%;
+    display: flex;
+    margin-left: 40%;
+}
+
+.navButton {
+    /*display: flex;*/
+    /*margin: auto 0;*/
+    color: lightgray;
+    border-color: #1f1f1f;
+    background-color: #1f1f1f;
+}
+
+.myNavbarSearch {
+    margin-top: 10px;
+    height: 30px;
+}
+
+/*.myNavbarButton {*/
+/*    margin-top: 12px;*/
+/*}*/
+
+.logButtonContainer {
+    height: 100%;
+    display: flex;
+    padding: 0;
+}
+
+.myNavbarUserButton {
+    padding: 0;
+    margin-left: auto;
+}
+
+.myNavbarExitButton {
+    padding: 0;
+    margin-right: auto;
+    color: #9a7e67;
+}

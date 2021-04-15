@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Footer</title>
+    <link href="css/footer.css" rel="stylesheet">
+</head>
+<body>
+    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+        <div class="footer-distributed">
+            <div class="container">
+                <div class="footer-left">
+
+                    <p class="footer-company-about" style="width: 70%; ">
+                        <span>Онлайн библиотека на Spring 2.0 (2021 г.)</span>
+                        Обучающий видеокурс JavaBegin (2019 г.) с использованием технологий: Spring Boot, Spring Data, Spring Security, Hibernate, Thymeleaf (J̶S̶F̶+̶F̶a̶c̶e̶l̶e̶t̶s), MySQL, Maven (G̶r̶a̶d̶l̶e)
+                    </p>
+                </div>
+
+                <div class="footer-center">
+
+                    <div>
+                        <i class="fa fa-map-marker"></i>
+                        <p><span>Россия, г. Москва</span> ул. Тестовая, д. 50</p>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-phone"></i>
+                        <p style="letter-spacing: 1px;">+7 (452) 123-45-61</p>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-envelope"></i>
+                        <p><a href="mailto:support@javabegin.ru">support@javabegin.ru</a></p>
+                    </div>
+
+                </div>
+
+                <div class="footer-right">
+
+                    <p class="footer-company-about">
+                        <span>О библиотеке</span>
+                        Онлайн библиотека предназначена для поиска и просмотра книг по различным жанрам. Администраторы имеют возможность добавлять, удалять, редактировать.
+                    </p>
+
+                    <div class="footer-icons">
+
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                        <a href="#"><i class="fa fa-github"></i></a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

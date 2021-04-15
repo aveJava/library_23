@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Toolbar</title>
+</head>
+<body>
+    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+        <div class="container-fluid toolbarContainer">
+            <div class="row">
+                <!-- Левый отступ -->
+                <div class="col-4"></div>
+
+                <!-- Номер текущей страницы -->
+                <div class="col-1 ofBlock">
+                    <th:block th:text="${thisPage}"></th:block>
+                    of
+                    <th:block th:text="${maxPage}"></th:block>
+                </div>
+
+                <!-- Номера страниц -->
+                <div class="col-2">
+                    <div class="btn-toolbar center-block" style="margin-top: 3%;">
+                        <div class="btn-group me-2" role="group" aria-label="Second group">
+                            <form class="myToolbar" action="Toolbar/NumberButtons" method="get">
+                                <input type="submit" class="btn btn-secondary btnBar" name="title" value="<<"/>
+                                <input type="submit" class="btn btn-secondary btnBar" name="title" value="<"/>
+                                <div class="btn btn-secondary btnBar" th:text="${thisPage}"></div>
+<!--                                <input type="submit" class="btn btn-secondary btnBar" name="title" value="1"/>-->
+                                <input type="submit" class="btn btn-secondary btnBar" name="title" value=">"/>
+                                <input type="submit" class="btn btn-secondary btnBar" name="title" value=">>"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Выпадающий список -->
+                <div class="col-1">
+                    <div class="btn-group itemMyToolbar" style="margin-top: 3%;">
+                        <button type="button" class="btn btn-danger dropdown-toggle btnDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <th:block th:text="${pageSize}"></th:block>
+                        </button>
+                        <ul class="dropdown-menu" style="max-width: 30px">
+                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=5">5</a></li>
+                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=10">10</a></li>
+                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=15">15</a></li>
+                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=20">20</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Правый отступ -->
+                <div class="col-4"></div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
