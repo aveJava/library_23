@@ -61,7 +61,16 @@
                                 </div>
 
                                 <!-- Редактирование и удаление -->
-                                <div th:insert="~{main/main-library-edit&delete :: main}"></div>
+                                <div class="row">
+                                    <div class="col" style="text-align: right;">
+                                        <a th:href="'/books/' + ${book.getId} + '/edit'" style="text-decoration: none;">
+                                            <img src="images/edit.png" class="myBookCardEditButton">
+                                        </a>
+                                        <a th:href="@{/books/{id}/showDeleteDialog (id = ${book.getId})}" style="text-decoration: none;">
+                                            <img src="images/delete.png" class="myBookCardDeleteButton">
+                                        </a>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>

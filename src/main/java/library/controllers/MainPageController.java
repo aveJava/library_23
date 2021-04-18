@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -70,13 +71,6 @@ public class MainPageController {
         model.addAttribute("pageSize", MainPageController.pageSize);
         model.addAttribute("totalElements", MainPageController.totalElements);
         model.addAttribute("SearchMessage", getSearchMessage());
-
-        // для формы редактирования книг
-        if (!model.containsAttribute("BookModel")) {
-            model.addAttribute("BookModel", new BookModel());
-        }
-        model.addAttribute("allAuthors", authorService.getAll());
-        model.addAttribute("allPublishers", publisherService.getAll());
 
         return "pages/main";
     }
@@ -188,32 +182,65 @@ public class MainPageController {
         return "redirect:/";
     }
 
-    // Редактирование книги
-    @PatchMapping("/books/{id}")
+    // Отправляет форму на редактирование книги
+    @GetMapping("/books/{id}/edit")
+    public String getBookEditForm(@PathVariable("id") long id, RedirectAttributes redirectAttr) {
+        BookModel book = new BookModel(bookService.get(id));
+        redirectAttr.addFlashAttribute("EditableBook", book);
+        redirectAttr.addFlashAttribute("ShowEditModelWindow", true);
+        redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());
+        redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());
+        return "redirect:/";
+    }
+
+    // Обновляет книгу (принимает заполненную форму на редактирование)
+    @PatchMapping(value = "/books/{id}", consumes = { "multipart/form-data" })
     public String bookEdit(@PathVariable("id") long id,
-                           @ModelAttribute("BookModel") @Valid BookModel book,
+                           @ModelAttribute("EditableBook") @Valid BookModel model,
                            BindingResult binding, RedirectAttributes redirectAttr) {
 
-//        System.out.println("Название: " + book.getName());
-//        System.out.println("Год издания: " + book.getPublishYear());
-//        System.out.println("ISBN " + book.getIsbn());
-//        System.out.println("Кол-во страниц " + book.getPageCount());
-//        System.out.println("Описание " + book.getDescription());
+        // создаем список сообщений об ошибках, отправляемый пользователю
+        List<String> errorMessages = new ArrayList<>();
 
+        if (!model.isHasImage()) errorMessages.add("Загрузите обложку книги (jpg, png или gif не менее 200 байт)");
         if (binding.hasErrors()) {
-            // получаем список сообщений для полозователя из BindingResult
-            List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : binding.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
             }
-            // передаем контроллеру, вызываемому по redirect, список сообщений об ошибках и редактуруемый объект
-            redirectAttr.addFlashAttribute("errors", errorMessages);
-            redirectAttr.addFlashAttribute("BookModel", book);
-
-            return "redirect:/#ModalWindow";
         }
 
-        return "errors/error-some";
+        // если форма заполнена правильно - сохраняем объект, иначе перенаправляем пользователя снова на страницу редактированя
+        if (errorMessages.isEmpty()) {
+            // если форма была заполнена правильно, сохраняем данные в БД
+            BookEntity book = new BookEntity(model, bookService, genreService, authorService, publisherService);
+            bookService.save(book);
+        } else {
+            // передаем контроллеру, вызываемому по redirect, список ошибок и прочие данные, необходимые для повторного редактирования объекта
+            redirectAttr.addFlashAttribute("errors", errorMessages);                        // список сообщений об ошибках
+            redirectAttr.addFlashAttribute("EditableBook", model);                          // редактуруемый объект
+            redirectAttr.addFlashAttribute("ShowEditModelWindow", true);                 // показывать модальное окно редактирования
+            redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());           // список авторов
+            redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());     // список издательств
+        }
+
+        return "redirect:/";
+    }
+
+    // Показывает диалог удаления книги (модальное окно)
+    @GetMapping("/books/{id}/showDeleteDialog")
+    public String showDeleteDialog(@PathVariable("id") long id, RedirectAttributes redirectAttr) {
+        redirectAttr.addFlashAttribute("ShowDeleteModelWindow", true);
+        redirectAttr.addFlashAttribute("bookId", id);
+        redirectAttr.addFlashAttribute("bookName", bookService.get(id).getName());
+
+        return "redirect:/";
+    }
+
+    // Удаляет книгу
+    @DeleteMapping("/books/{id}")
+    public String deleteBook(@PathVariable("id") long id) {
+        bookService.delete(bookService.get(id));
+        return "redirect:/";
     }
 
 }

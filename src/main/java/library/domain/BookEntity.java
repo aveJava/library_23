@@ -1,5 +1,10 @@
 package library.domain;
 
+import library.model.BookModel;
+import library.service.AuthorEntityService;
+import library.service.BookEntityService;
+import library.service.GenreEntityService;
+import library.service.PublisherEntityService;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +15,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.io.IOException;
 
 @Entity
 @Table(name = "book")
@@ -47,6 +53,36 @@ public class BookEntity {
         this.description = description;
     }
 
+    public BookEntity(BookModel model, BookEntityService bookService, GenreEntityService genreService, AuthorEntityService authorService, PublisherEntityService publisherService) {
+        id = model.getId();
+        name = model.getName();
+        pageCount = model.getPageCount();
+        isbn = model.getIsbn();
+        genre = genreService.search(model.getGenre()).get(0);
+        author = authorService.search(model.getAuthor()).get(0);
+        publisher = publisherService.search(model.getPublisher()).get(0);
+        publishYear = model.getPublishYear();
+        avgRating = model.getAvgRating();
+        totalVoteCount = model.getTotalVoteCount();
+        totalRating = model.getTotalRating();
+        viewCount = model.getViewCount();
+        description = model.getDescription();
+
+        try {
+            content = model.getUploadedContent() != null ?
+                    model.getUploadedContent().getBytes() : bookService.get(id).getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {                                      // 200 байт - условный минимальный размер файла
+            image = model.getUploadedImage() != null && model.getUploadedImage().getSize() > 199 ?
+                    model.getUploadedImage().getBytes() : bookService.get(id).getImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -78,7 +114,7 @@ public class BookEntity {
     @Column(name = "publish_year")
     private int publishYear;
 
-    @Lob
+    @Lob()
     private byte[] image;
 
     @Column(name = "avg_rating")
