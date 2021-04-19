@@ -2,16 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MainPage</title>
+    <title>ErrorPage</title>
     <!-- Подключение стилей Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
           crossorigin="anonymous">
     <!-- Подключение своих стилей -->
-    <link href="static/css/navbar.css" rel="stylesheet">
-    <link href="static/css/top.css" rel="stylesheet">
-    <link href="static/css/library.css" rel="stylesheet">
-    <link href="static/css/footer.css" rel="stylesheet">
+    <link href="/static/css/navbar.css" rel="stylesheet">
+    <link href="/static/css/footer.css" rel="stylesheet">
     <!-- Свой стиль для этой страницы -->
     <style>
         body {
@@ -38,21 +36,24 @@
     <div th:insert="~{general_parts/navbar :: main}"></div>
 
 
-    <!-- Top -->
-    <div th:insert="~{main/main-top :: main}"></div>
-
-
-    <!-- Library -->
-    <div th:insert="~{main/main-library :: main}"></div>
+    <!-- Error message -->
+    <div class="container-fluid" style="height: 70vh; background-image: url(/static/images/background.jpg); background-size: 100% 100%;">
+        <div class="row" style="height: 5vw"></div>     <!-- Отступ сверху -->
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2">
+                <img src="/static/images/sad.png" style="width: 10vw;">
+            </div>
+            <div class="col-8" style="color: #5383d3">
+                <p th:text="${errName}" style="font-size: 2.5vw;">Имя ошибки</p>
+                <p th:text="${errMessage}" style="margin-top: 1.5vw; font-size: 1.2vw;">Сообщение для пользователя</p>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Footer -->
     <div th:insert="~{general_parts/footer :: main}"></div>
-
-
-    <!-- Modal windows (edit & delete) -->
-    <div th:insert="~{main/main-library-edit&delete :: edit}"></div>
-    <div th:insert="~{main/main-library-edit&delete :: delete}"></div>
 
 </div>
 

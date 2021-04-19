@@ -21,7 +21,8 @@
                     <th:block th:each="book : ${pageBooks}">
 
                         <!-- Карточка книги -->
-                        <div class="card myBookCard">
+                        <div class="card myBookCard effect8">
+                            <a th:href="@{books/{id}/PDF_Content (id=${book.getId()})}" class="stretched-link"></a>
                             <img th:src="'http://localhost:8080/img?id=' + ${book.getId()}" class="myBookCardImage">
                             <div class="card-body" style="padding: 0.2vw 0.5vw;">
 
@@ -34,7 +35,7 @@
                                 <div class="row">
                                     <div class="col-4" style="padding-right: 0;">
                                         <div>
-                                            <img th:src="@{images/see.png}" style="height: 1.3vw;">
+                                            <img th:src="@{static/images/see.png}" style="height: 1.3vw;">
                                             <div style="display: inline-block; font-size: 0.7vw;">
                                                 <th:block th:text="${book.getViewCount}"></th:block>
                                             </div>
@@ -62,12 +63,12 @@
 
                                 <!-- Редактирование и удаление -->
                                 <div class="row">
-                                    <div class="col" style="text-align: right;">
+                                    <div class="col" style="text-align: right; position: relative; z-index: 1">
                                         <a th:href="'/books/' + ${book.getId} + '/edit'" style="text-decoration: none;">
-                                            <img src="images/edit.png" class="myBookCardEditButton">
+                                            <img src="static/images/edit.png" class="myBookCardEditButton">
                                         </a>
                                         <a th:href="@{/books/{id}/showDeleteDialog (id = ${book.getId})}" style="text-decoration: none;">
-                                            <img src="images/delete.png" class="myBookCardDeleteButton">
+                                            <img src="static/images/delete.png" class="myBookCardDeleteButton">
                                         </a>
                                     </div>
                                 </div>

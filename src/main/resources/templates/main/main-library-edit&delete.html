@@ -51,17 +51,17 @@
                                                     <script type="text/javascript">
                                                         $(document).ready( function() {
                                                             $('#bntUpload').click(function(){
-                                                                $("#so_file").click();
+                                                                $("#cover").click();
                                                             });
-                                                            $('#so_file').change(function() {
-                                                                $('#selected_filename').text($('#so_file')[0].files[0].name);
+                                                            $('#cover').change(function() {
+                                                                $('#selected_filename').text($('#cover')[0].files[0].name);
                                                             });
                                                         });
                                                     </script>
                                                     <!-- Кнопка и окно отображения файла -->
-                                                    <input type="file" form="EditBookForm" name="uploadedImage" id="so_file" accept="image/jpeg, image/png, image/gif" style="display:none;"/>
+                                                    <input type="file" form="EditBookForm" name="uploadedImage" id="cover" accept="image/jpeg, image/png, image/gif" style="display:none;"/>
                                                     <button class="bntUpload" id="bntUpload">
-                                                        <img src="images/addImg.png" style="width: 1.1vw;">
+                                                        <img src="static/images/addImg.png" style="width: 1.1vw;">
                                                         Загрузить
                                                     </button>
                                                     <span class="selectedFilenameArea" id="selected_filename">Выберите файл ...</span>
@@ -71,7 +71,7 @@
                                                     <div class="container-fluid" style="margin-top: 5%;">
                                                         <div th:each="err : ${errors}">
                                                             <div style="margin-top: 0.8vw;">
-                                                                <img src="images/warning.jpg" style="width: 1.5vw; display: inline-block;">
+                                                                <img src="static/images/warning.jpg" style="width: 1.5vw; display: inline-block;">
                                                                 <th:block th:text="${err}" style="color: firebrick; font-style: italic; font-family: monospace; font-size: 118%;"></th:block>
                                                             </div>
                                                         </div>
@@ -143,22 +143,23 @@
                                             </div>
                                             <!-- Content -->
                                             <div class="row" style="margin-top: 0.5vw;">
+                                                <label for="content" class="form-label editFieldLabel" style="margin-top: 0.5vw;">Контент</label>
                                                 <!-- Скрипт на скрытие кнопки "Выберите файл" и отображение выбранного файла -->
                                                 <script type="text/javascript">
                                                     $(document).ready( function() {
                                                         $('#bntPDFUpload').click(function(){
-                                                            $("#so_PDF_file").click();
+                                                            $("#content").click();
                                                         });
-                                                        $('#so_PDF_file').change(function() {
-                                                            $('#selected_PDF_filename').text($('#so_PDF_file')[0].files[0].name);
+                                                        $('#content').change(function() {
+                                                            $('#selected_PDF_filename').text($('#content')[0].files[0].name);
                                                         });
                                                     });
                                                 </script>
                                                 <!-- Кнопка и окно отображения файла -->
                                                 <div style="margin-left: auto; width: 16.7vw; margin-right: -5%;">
-                                                    <input type="file" form="EditBookForm" name="uploadedContent" id="so_PDF_file" style="display:none;"/>
+                                                    <input type="file" form="EditBookForm" name="uploadedContent" id="content" accept="application/pdf" style="display:none;"/>
                                                     <button class="bntUpload" id="bntPDFUpload" style="width: 14vw; margin-left: 0;">
-                                                        <img src="images/addPDF.png" style="width: 1.1vw;">
+                                                        <img src="static/images/addPDF.png" style="width: 1.1vw;">
                                                         Загрузить
                                                     </button>
                                                     <div class="selectedFilenameArea" id="selected_PDF_filename" style="width: 14vw; margin-left: auto; margin-right: 1.5vw; padding-left: .5vw;">Выберите файл ...</div>
@@ -223,7 +224,7 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-1">
-                                        <img src="images/warning.jpg" style="width: 1.5vw; display: inline-block;">
+                                        <img src="static/images/warning.jpg" style="width: 1.5vw; display: inline-block;">
                                     </div>
                                     <div class="col-11">
                                         Вы уверены, что хотите удалить книгу <br>

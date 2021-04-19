@@ -18,15 +18,16 @@
                         <div class="row booksTopRow">
                             <th:block th:each="book : ${top}">
                                 <div class="imgContainer">
+                                    <a th:href="@{books/{id}/PDF_Content (id=${book.getId()})}" class="stretched-link"></a>
                                     <img class="bookTopImg" th:src="'http://localhost:8080/img?id=' + ${book.getId()}">
                                 </div>
-                                <img class="bookTopImg shadow" src="images/book-shadow.png">
+                                <img class="bookTopImg shadow" src="static/images/book-shadow.png">
                             </th:block>
                         </div>
 
                         <!-- Полка -->
                         <div class="row rowImg">
-                            <img src="images/row-product-bot.png">
+                            <img src="static/images/row-product-bot.png">
                         </div>
 
                     </div>
