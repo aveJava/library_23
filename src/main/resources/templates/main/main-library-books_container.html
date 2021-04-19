@@ -23,7 +23,7 @@
                         <!-- Карточка книги -->
                         <div class="card myBookCard effect8">
                             <a th:href="@{books/{id}/PDF_Content (id=${book.getId()})}" class="stretched-link"></a>
-                            <img th:src="'http://localhost:8080/img?id=' + ${book.getId()}" class="myBookCardImage">
+                            <img th:src="'http://localhost:8080/books/img?id=' + ${book.getId()}" class="myBookCardImage">
                             <div class="card-body" style="padding: 0.2vw 0.5vw;">
 
                                 <!-- ФИО автора -->

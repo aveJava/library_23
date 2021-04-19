@@ -1,4 +1,4 @@
-package library.controllers;
+package library.controllers.pages;
 
 import library.domain.BookEntity;
 import library.model.BookModel;
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -182,50 +181,6 @@ public class MainPageController {
         return "redirect:/";
     }
 
-    // Отправляет форму на редактирование книги
-    @GetMapping("/books/{id}/edit")
-    public String getBookEditForm(@PathVariable("id") long id, RedirectAttributes redirectAttr) {
-        BookModel book = new BookModel(bookService.get(id));
-        redirectAttr.addFlashAttribute("EditableBook", book);
-        redirectAttr.addFlashAttribute("ShowEditModelWindow", true);
-        redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());
-        redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());
-        return "redirect:/";
-    }
-
-    // Обновляет книгу (принимает заполненную форму на редактирование)
-    @PatchMapping(value = "/books/{id}", consumes = { "multipart/form-data" })
-    public String bookEdit(@PathVariable("id") long id,
-                           @ModelAttribute("EditableBook") @Valid BookModel model,
-                           BindingResult binding, RedirectAttributes redirectAttr) {
-
-        // создаем список сообщений об ошибках, отправляемый пользователю
-        List<String> errorMessages = new ArrayList<>();
-
-        if (!model.isHasImage()) errorMessages.add("Загрузите обложку книги (jpg, png или gif не менее 200 байт)");
-        if (binding.hasErrors()) {
-            for (ObjectError error : binding.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-        }
-
-        // если форма заполнена правильно - сохраняем объект, иначе перенаправляем пользователя снова на страницу редактированя
-        if (errorMessages.isEmpty()) {
-            // если форма была заполнена правильно, сохраняем данные в БД
-            BookEntity book = new BookEntity(model, bookService, genreService, authorService, publisherService);
-            bookService.save(book);
-        } else {
-            // передаем контроллеру, вызываемому по redirect, список ошибок и прочие данные, необходимые для повторного редактирования объекта
-            redirectAttr.addFlashAttribute("errors", errorMessages);                        // список сообщений об ошибках
-            redirectAttr.addFlashAttribute("EditableBook", model);                          // редактуруемый объект
-            redirectAttr.addFlashAttribute("ShowEditModelWindow", true);                 // показывать модальное окно редактирования
-            redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());           // список авторов
-            redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());     // список издательств
-        }
-
-        return "redirect:/";
-    }
-
     // Показывает диалог удаления книги (модальное окно)
     @GetMapping("/books/{id}/showDeleteDialog")
     public String showDeleteDialog(@PathVariable("id") long id, RedirectAttributes redirectAttr) {
@@ -236,11 +191,15 @@ public class MainPageController {
         return "redirect:/";
     }
 
-    // Удаляет книгу
-    @DeleteMapping("/books/{id}")
-    public String deleteBook(@PathVariable("id") long id) {
-        bookService.delete(bookService.get(id));
-        return "redirect:/";
+    // Принимает запрос на показ содержания книги
+    @GetMapping("/books/{id}/PDF_Content")
+    public String getContent(@PathVariable("id") int id) {
+        byte[] content = bookService.get(id).getContent();
+        if (content != null && content.length > 0) {
+            return "forward:/books/content?id=" + id;
+        } else {
+            return "redirect:/errors?name=pdf_not_found";
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package library.controllers;
+package library.controllers.pages;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
