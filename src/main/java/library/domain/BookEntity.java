@@ -54,7 +54,7 @@ public class BookEntity {
     }
 
     public BookEntity(BookModel model, BookEntityService bookService, GenreEntityService genreService, AuthorEntityService authorService, PublisherEntityService publisherService) {
-        id = model.getId();
+        if (model.getId() != null) id = model.getId();
         name = model.getName();
         pageCount = model.getPageCount();
         isbn = model.getIsbn();
@@ -68,19 +68,24 @@ public class BookEntity {
         viewCount = model.getViewCount();
         description = model.getDescription();
 
-        try {
+        if (model.getId() != null) try {
             content = model.getUploadedContent() != null ?
                     model.getUploadedContent().getBytes() : bookService.get(id).getContent();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        try {                                      // 200 байт - условный минимальный размер файла
-            image = model.getUploadedImage() != null && model.getUploadedImage().getSize() > 199 ?
+        if (model.getImage() != null) {
+            image = model.getImage();
+        } else
+        if (model.getId() != null) try {
+            image = model.getUploadedImage() != null && model.getUploadedImage().getSize() > 199 ?  // 200 байт - условный минимальный размер файла
                     model.getUploadedImage().getBytes() : bookService.get(id).getImage();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     @Id

@@ -91,4 +91,9 @@ public class BookEntityService implements BookEntityDao {
     public void updateRating(long id, long totalRating, long totalViewCount, int avgRating) {
         bookRepo.updateRating(id, totalRating, totalViewCount, avgRating);
     }
+
+    @Override
+    public List<String> getAllISBN() {
+        return bookRepo.getAllISBN();
+    }
 }

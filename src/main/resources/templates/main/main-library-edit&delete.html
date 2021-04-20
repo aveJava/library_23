@@ -28,7 +28,8 @@
                     <div class="modal-content">
                         <!-- Заголовок -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="EditModalLabel" th:text="${EditableBook.getName()}">Modal title</h5>
+                            <h5 th:unless="${EditableBook.getId()} == null" class="modal-title" id="EditModalLabel" th:text="${EditableBook.getName()}">Modal title</h5>
+                            <h5 th:if="${EditableBook.getId()} == null" class="modal-title" id="EditModalLabel" th:text="'Новая книга'">Modal title for create new book</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Содержание -->
@@ -43,7 +44,8 @@
 
                                                 <!-- Обложка -->
                                                 <div class="row">
-                                                    <img th:src="'http://localhost:8080/books/img?id=' + ${EditableBook.getId()}">
+                                                    <img th:unless="${EditableBook.getId()} == null" th:src="'http://localhost:8080/books/img?id=' + ${EditableBook.getId()}">
+                                                    <img th:if="${EditableBook.getId()} == null" src="static/images/no-cover.jpg">
                                                 </div>
                                                 <!-- Загрузка -->
                                                 <div class="row" style="margin-top: 0.5vw;">
@@ -84,8 +86,8 @@
 
                                     <!-- Правая колонка (поля, которые надо заполнить) -->
                                     <div class="col-8">
-                                        <form enctype="multipart/form-data" th:method="POST" th:action="@{/books/{id} (id=${EditableBook.getId()})}" th:object="${EditableBook}" id="EditBookForm">
-                                            <input type="hidden" name="_method" value="patch">
+                                        <form enctype="multipart/form-data" th:action="${actionURL}" th:method="${actionMethod}" th:object="${EditableBook}" id="EditBookForm">
+                                            <input type="hidden" name="_method" value="patch" th:if="${actionMethod} == 'PATCH'">
                                             <div class="row">
                                                 <label for="name" class="form-label editFieldLabel">Название</label>
                                                 <input type="text" class="form-control editFieldInput" th:field="*{name}" id="name">
@@ -134,12 +136,16 @@
                                             <!-- PublishYear -->
                                             <div class="row">
                                                 <label for="publishYear" class="form-label editFieldLabel">Год</label>
-                                                <input type="text" class="form-control editFieldInput" id="publishYear" th:field="*{publishYear}">
+                                                <input type="text" class="form-control editFieldInput" id="publishYear" th:field="*{publishYear}" th:unless="${EditableBook.getPublishYear()} == null">
+                                                <!-- Чтобы не отображался ноль, если это новая книга -->
+                                                <input type="text" class="form-control editFieldInput" id="publishYear" name="publishYear" th:if="${EditableBook.getPublishYear()} == null">
                                             </div>
                                             <!-- PageCount -->
                                             <div class="row">
                                                 <label for="page_count" class="form-label editFieldLabel">Кол-во страниц</label>
-                                                <input type="text" class="form-control editFieldInput" id="page_count" th:field="*{pageCount}">
+                                                <input type="text" class="form-control editFieldInput" id="page_count" th:field="*{pageCount}" th:unless="${EditableBook.getPageCount()} == 0">
+                                                <!-- Чтобы не отображался ноль, если это новая книга -->
+                                                <input type="text" class="form-control editFieldInput" id="page_count" name="pageCount" th:if="${EditableBook.getPageCount()} == 0">
                                             </div>
                                             <!-- Content -->
                                             <div class="row" style="margin-top: 0.5vw;">
@@ -170,8 +176,9 @@
                                                 <label for="description" class="form-label editFieldLabel" style="margin-top: 3%;">Описание</label>
                                                 <textarea type="text" class="form-control editFieldInput" id="description" th:field="*{description}" style="height: 5vw; resize: none;"></textarea>
                                             </div>
-                                            <!-- Без этого значение поля hasImg будет потеряно -->
+                                            <!-- Без этого значения полей будут потеряны -->
                                             <input type="hidden" th:field="*{hasImg}">
+                                            <input type="hidden" th:field="*{image}">
                                         </form>
                                     </div>
 

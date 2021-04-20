@@ -54,4 +54,8 @@ public interface BookEntityRepo extends JpaRepository<BookEntity, Long> {
     // получение контента по id
     @Query("SELECT b.content FROM BookEntity b WHERE b.id=:id")
     byte[] getContent(@Param("id") long id);
+
+    // получить все ISBN
+    @Query("SELECT b.isbn FROM BookEntity b")
+    List<String> getAllISBN();
 }
