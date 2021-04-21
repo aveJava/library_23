@@ -21,6 +21,26 @@
                 })
             </script>
 
+            <!-- Скрипт на скрытие кнопки "Выберите файл" и отображение выбранного файла -->
+            <script type="text/javascript">
+                $(document).ready( function() {
+                    // для image
+                    $('#bntUpload').click(function(){
+                        $("#cover").click();
+                    });
+                    $('#cover').change(function() {
+                        $('#selected_filename').text($('#cover')[0].files[0].name);
+                    });
+                    // для content
+                    $('#bntPDFUpload').click(function(){
+                        $("#content").click();
+                    });
+                    $('#content').change(function() {
+                        $('#selected_PDF_filename').text($('#content')[0].files[0].name);
+                    });
+                });
+            </script>
+
 
             <!-- Modal window -->
             <div class="modal fade" id="EditBookModalWindow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-show="true">
@@ -49,17 +69,6 @@
                                                 </div>
                                                 <!-- Загрузка -->
                                                 <div class="row" style="margin-top: 0.5vw;">
-                                                    <!-- Скрипт на скрытие кнопки "Выберите файл" и отображение выбранного файла -->
-                                                    <script type="text/javascript">
-                                                        $(document).ready( function() {
-                                                            $('#bntUpload').click(function(){
-                                                                $("#cover").click();
-                                                            });
-                                                            $('#cover').change(function() {
-                                                                $('#selected_filename').text($('#cover')[0].files[0].name);
-                                                            });
-                                                        });
-                                                    </script>
                                                     <!-- Кнопка и окно отображения файла -->
                                                     <input type="file" form="EditBookForm" name="uploadedImage" id="cover" accept="image/jpeg, image/png, image/gif" style="display:none;"/>
                                                     <button class="bntUpload" id="bntUpload">
@@ -68,6 +77,8 @@
                                                     </button>
                                                     <span class="selectedFilenameArea" id="selected_filename">Выберите файл ...</span>
                                                 </div>
+                                                <!-- Костыль, необходимый для загрузки контента -->
+                                                <input type="file" form="EditBookForm" name="uploadedContent" id="content" accept="application/pdf" style="display:none;"/>
                                                 <!-- Сообщения об ошибках -->
                                                 <div class="row">
                                                     <div class="container-fluid" style="margin-top: 5%;">
@@ -149,22 +160,11 @@
                                             </div>
                                             <!-- Content -->
                                             <div class="row" style="margin-top: 0.5vw;">
-                                                <label for="content" class="form-label editFieldLabel" style="margin-top: 0.5vw;">Контент</label>
-                                                <!-- Скрипт на скрытие кнопки "Выберите файл" и отображение выбранного файла -->
-                                                <script type="text/javascript">
-                                                    $(document).ready( function() {
-                                                        $('#bntPDFUpload').click(function(){
-                                                            $("#content").click();
-                                                        });
-                                                        $('#content').change(function() {
-                                                            $('#selected_PDF_filename').text($('#content')[0].files[0].name);
-                                                        });
-                                                    });
-                                                </script>
+                                                <label for="pseuvoInput" class="form-label editFieldLabel" style="margin-top: 0.5vw;">Контент</label>
                                                 <!-- Кнопка и окно отображения файла -->
                                                 <div style="margin-left: auto; width: 16.7vw; margin-right: -5%;">
-                                                    <input type="file" form="EditBookForm" name="uploadedContent" id="content" accept="application/pdf" style="display:none;"/>
-                                                    <button id="bntPDFUpload" style="width: 14vw; margin-left: 0;">
+                                                    <input type="file" id="pseuvoInput" style="display:none;"/>
+                                                    <button class="bntUpload" id="bntPDFUpload" style="width: 14vw; margin-left: 0;">
                                                         <img src="static/images/addPDF.png" style="width: 1.1vw;">
                                                         Загрузить
                                                     </button>
@@ -173,15 +173,14 @@
                                             </div>
                                             <!-- Description -->
                                             <div class="row">
-                                                <label for="description" class="form-label editFieldLabel" style="margin-top: 3%;">Описание</label>
-                                                <textarea type="text" class="form-control editFieldInput" id="description" th:field="*{description}" style="height: 5vw; resize: none;"></textarea>
+                                                <label for="description" form="EditBookForm" class="form-label editFieldLabel" style="margin-top: 3%;">Описание</label>
+                                                <textarea type="text" form="EditBookForm" class="form-control editFieldInput" id="description" th:field="*{description}" style="height: 5vw; resize: none;"></textarea>
                                             </div>
                                             <!-- Без этого значения полей будут потеряны -->
-                                            <input type="hidden" th:field="*{image}">
-                                            <input type="hidden" th:field="*{content}">
+                                            <input type="hidden" form="EditBookForm" th:field="*{image}">
+                                            <input type="hidden" form="EditBookForm" th:field="*{content}">
                                         </form>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
