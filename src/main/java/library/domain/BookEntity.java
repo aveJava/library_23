@@ -2,7 +2,6 @@ package library.domain;
 
 import library.model.BookModel;
 import library.service.AuthorEntityService;
-import library.service.BookEntityService;
 import library.service.GenreEntityService;
 import library.service.PublisherEntityService;
 import lombok.EqualsAndHashCode;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import java.io.IOException;
 
 @Entity
 @Table(name = "book")
@@ -53,39 +51,22 @@ public class BookEntity {
         this.description = description;
     }
 
-    public BookEntity(BookModel model, BookEntityService bookService, GenreEntityService genreService, AuthorEntityService authorService, PublisherEntityService publisherService) {
+    public BookEntity(BookModel model, GenreEntityService genreService, AuthorEntityService authorService, PublisherEntityService publisherService) {
         if (model.getId() != null) id = model.getId();
         name = model.getName();
+        content = model.getContent();
         pageCount = model.getPageCount();
         isbn = model.getIsbn();
         genre = genreService.search(model.getGenre()).get(0);
         author = authorService.search(model.getAuthor()).get(0);
         publisher = publisherService.search(model.getPublisher()).get(0);
         publishYear = model.getPublishYear();
+        image = model.getImage();
         avgRating = model.getAvgRating();
         totalVoteCount = model.getTotalVoteCount();
         totalRating = model.getTotalRating();
         viewCount = model.getViewCount();
         description = model.getDescription();
-
-        if (model.getId() != null) try {
-            content = model.getUploadedContent() != null ?
-                    model.getUploadedContent().getBytes() : bookService.get(id).getContent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (model.getImage() != null) {
-            image = model.getImage();
-        } else
-        if (model.getId() != null) try {
-            image = model.getUploadedImage() != null && model.getUploadedImage().getSize() > 199 ?  // 200 байт - условный минимальный размер файла
-                    model.getUploadedImage().getBytes() : bookService.get(id).getImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     @Id

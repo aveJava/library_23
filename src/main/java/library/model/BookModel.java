@@ -4,15 +4,12 @@ import library.domain.BookEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
 @EqualsAndHashCode(of = "id")
@@ -62,23 +59,14 @@ public class BookModel {
 
     private String description;
 
-    private boolean hasImg;
-
     public BookModel() {
-        // загрузка обложки, используемой по умолчанию
-        String path = "src/main/resources/static/images/no-cover.jpg";
-        try {
-            image = Files.readAllBytes(Paths.get(path));
-            hasImg = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public BookModel(BookEntity entity) {
         id = entity.getId();
         name = entity.getName();
-//        content = entity.getContent();
+        content = entity.getContent();
         pageCount = entity.getPageCount();
         isbn = entity.getIsbn();
         genre = entity.getGenre().getName();
@@ -91,15 +79,6 @@ public class BookModel {
         totalRating = entity.getTotalRating();
         viewCount = entity.getViewCount();
         description = entity.getDescription();
-
-        hasImg = image != null && image.length != 0;
-    }
-
-    public boolean isHasImage() {
-        long size = 0;
-        if (hasImg) size += 200;    // условный минимальный размер файла
-        if (uploadedImage != null) size += uploadedImage.getSize();
-        return size > 199;
     }
 
     @Override

@@ -11,12 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +117,7 @@ public class BookEntityController {
 
     // Предоставляет содержание книги (pdf) по ее id
     @GetMapping("/books/content")
-    public void getContent(HttpServletResponse response, @RequestParam("id") int id, Model model) throws IOException {
+    public void getContent(HttpServletResponse response, @RequestParam("id") int id) throws IOException {
         BookEntity book = bookService.get(id);
 
         byte[] contentBytes = book.getContent();
@@ -131,9 +134,22 @@ public class BookEntityController {
     // проверяет корректность заполненных данных, если все правильно - сохраняет объект,
     //      если нет - подготавливает RedirectAttributes для перенаправления на повторное редактирование формы
     public void validateProcess(BookModel model, BindingResult binding, RedirectAttributes redirectAttr) {
+
+        // если были загружены обложка или контент, сохраняем их в поля image и content
+        MultipartFile uploadedImg = model.getUploadedImage();
+        MultipartFile uploadedCont = model.getUploadedContent();
+        try {
+            if (uploadedImg != null && uploadedImg.getSize() > 199) model.setImage(uploadedImg.getBytes());
+                // если это новая книга, и обложка не была загружена, сохраняем дефолтную обложку (no-cover)
+            else if (model.getId() == null) {
+                String path = "src/main/resources/static/images/no-cover.jpg";
+                model.setImage(Files.readAllBytes(Paths.get(path)));
+            }
+            if (uploadedCont != null && uploadedCont.getSize() > 199) model.setContent(uploadedCont.getBytes());
+        } catch (IOException e) { e.printStackTrace(); }
+
         // создаем список сообщений об ошибках, отправляемый пользователю
         List<String> errorMessages = new ArrayList<>();
-        if (!model.isHasImage()) errorMessages.add("Загрузите обложку книги (jpg, png или gif не менее 200 байт)");
         if (binding.hasErrors()) {
             for (ObjectError error : binding.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
@@ -152,6 +168,10 @@ public class BookEntityController {
                 errorMessages.add(i, "Укажите год издания");
             }
         }
+
+        // проверка наличия обложки
+        if (model.getImage() == null || model.getImage().length < 200) errorMessages.add("Загрузите обложку книги (jpg, png или gif не менее 200 байт)");
+
         // проверка ISBN
         String isbn = model.getIsbn();
         if (isbn == null || isbn.isEmpty()) errorMessages.add("Заполните ISBN");
@@ -167,6 +187,7 @@ public class BookEntityController {
                 }
             }
         }
+
         // проверка года
         int year = LocalDate.now().getYear();
         Integer publishYear = model.getPublishYear();
@@ -175,7 +196,7 @@ public class BookEntityController {
         // если форма заполнена правильно - сохраняем объект, иначе перенаправляем пользователя снова на страницу редактированя
         if (errorMessages.isEmpty()) {
             // если форма была заполнена правильно, сохраняем данные в БД
-            BookEntity book = new BookEntity(model, bookService, genreService, authorService, publisherService);
+            BookEntity book = new BookEntity(model, genreService, authorService, publisherService);
             bookService.save(book);
         } else {
             // передаем контроллеру, вызываемому по redirect, список ошибок и прочие данные, необходимые для повторного редактирования объекта
