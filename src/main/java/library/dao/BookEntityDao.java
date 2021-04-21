@@ -18,5 +18,5 @@ public interface BookEntityDao extends GeneralDao<BookEntity> {
     void updateRating(long id, long totalRating, long totalViewCount, int avgRating);
 
     // получить все ISBN
-    List<String> getAllISBN();
+    List<String> getAllISBN(Long id);
 }

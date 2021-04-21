@@ -93,7 +93,7 @@ public class BookEntityService implements BookEntityDao {
     }
 
     @Override
-    public List<String> getAllISBN() {
-        return bookRepo.getAllISBN();
+    public List<String> getAllISBN(Long id) {
+        return bookRepo.getAllisbnExceptThis(id);
     }
 }

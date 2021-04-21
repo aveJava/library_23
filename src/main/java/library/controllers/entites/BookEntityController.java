@@ -162,7 +162,7 @@ public class BookEntityController {
             else if (isbnTrim.length() < 10 || isbnTrim.length() > 13)
                 errorMessages.add("ISBN должен включать от 10 до 13 цифр (допускается использовать дефисы между ними)");
             else {
-                for (String isb : bookService.getAllISBN()) {
+                for (String isb : bookService.getAllISBN(model.getId())) {
                     if (isb.replaceAll("-", "").equals(isbnTrim)) errorMessages.add("Книга с таким ISBN уже есть в базе");
                 }
             }

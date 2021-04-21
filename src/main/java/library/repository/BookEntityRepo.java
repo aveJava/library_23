@@ -55,7 +55,7 @@ public interface BookEntityRepo extends JpaRepository<BookEntity, Long> {
     @Query("SELECT b.content FROM BookEntity b WHERE b.id=:id")
     byte[] getContent(@Param("id") long id);
 
-    // получить все ISBN
-    @Query("SELECT b.isbn FROM BookEntity b")
-    List<String> getAllISBN();
+    // получить все ISBN кроме ISBN книги с указанным id
+    @Query("SELECT b.isbn FROM BookEntity b WHERE :id IS NULL OR b.isbn NOT IN (SELECT b1.isbn FROM BookEntity b1 WHERE b.id = :id)")
+    List<String> getAllisbnExceptThis(@Param("id") Long id);
 }
