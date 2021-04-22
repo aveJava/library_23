@@ -50,9 +50,10 @@
     <div th:insert="~{general_parts/footer :: main}"></div>
 
 
-    <!-- Modal windows (edit & delete) -->
-    <div th:insert="~{main/main-library-edit&delete :: edit}"></div>
-    <div th:insert="~{main/main-library-edit&delete :: delete}"></div>
+    <!-- Modal windows (edit & delete & rating) -->
+    <div th:insert="~{main/main-library-edit&delete&rating :: edit}"></div>
+    <div th:insert="~{main/main-library-edit&delete&rating :: delete}"></div>
+    <div th:insert="~{main/main-library-edit&delete&rating :: ratingMess}"></div>
 
 </div>
 
