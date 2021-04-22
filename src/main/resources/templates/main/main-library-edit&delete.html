@@ -158,28 +158,28 @@
                                                 <!-- Чтобы не отображался ноль, если это новая книга -->
                                                 <input type="text" class="form-control editFieldInput" id="page_count" name="pageCount" th:if="${EditableBook.getPageCount()} == 0">
                                             </div>
-                                            <!-- Content -->
-                                            <div class="row" style="margin-top: 0.5vw;">
-                                                <label for="pseuvoInput" class="form-label editFieldLabel" style="margin-top: 0.5vw;">Контент</label>
-                                                <!-- Кнопка и окно отображения файла -->
-                                                <div style="margin-left: auto; width: 16.7vw; margin-right: -5%;">
-                                                    <input type="file" id="pseuvoInput" style="display:none;"/>
-                                                    <button class="bntUpload" id="bntPDFUpload" style="width: 14vw; margin-left: 0;">
-                                                        <img src="static/images/addPDF.png" style="width: 1.1vw;">
-                                                        Загрузить
-                                                    </button>
-                                                    <div class="selectedFilenameArea" id="selected_PDF_filename" style="width: 14vw; margin-left: auto; margin-right: 1.5vw; padding-left: .5vw;">Выберите файл ...</div>
-                                                </div>
-                                            </div>
-                                            <!-- Description -->
-                                            <div class="row">
-                                                <label for="description" form="EditBookForm" class="form-label editFieldLabel" style="margin-top: 3%;">Описание</label>
-                                                <textarea type="text" form="EditBookForm" class="form-control editFieldInput" id="description" th:field="*{description}" style="height: 5vw; resize: none;"></textarea>
-                                            </div>
                                             <!-- Без этого значения полей будут потеряны -->
                                             <input type="hidden" form="EditBookForm" th:field="*{image}">
                                             <input type="hidden" form="EditBookForm" th:field="*{content}">
                                         </form>
+                                        <!-- Content -->
+                                        <div class="row" style="margin-top: 0.5vw;">
+                                            <label for="pseuvoInput" class="form-label editFieldLabel" style="margin-top: 0.5vw;">Контент</label>
+                                            <!-- Кнопка и окно отображения файла -->
+                                            <div style="margin-left: auto; width: 16.7vw; margin-right: -5%;">
+                                                <input type="file" id="pseuvoInput" style="display:none;"/>
+                                                <button class="bntUpload" id="bntPDFUpload" style="width: 14vw; margin-left: 0;">
+                                                    <img src="static/images/addPDF.png" style="width: 1.1vw;">
+                                                    Загрузить
+                                                </button>
+                                                <div class="selectedFilenameArea" id="selected_PDF_filename" style="width: 14vw; margin-left: auto; margin-right: 1.5vw; padding-left: .5vw;">Выберите файл ...</div>
+                                            </div>
+                                        </div>
+                                        <!-- Description -->
+                                        <div class="row">
+                                            <label for="description" form="EditBookForm" class="form-label editFieldLabel" style="margin-top: 3%;">Описание</label>
+                                            <textarea type="text" form="EditBookForm" class="form-control editFieldInput" id="description" name="description" th:value="${EditableBook.getDescription()}" style="height: 5vw; resize: none;"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
