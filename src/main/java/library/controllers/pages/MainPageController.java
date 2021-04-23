@@ -188,7 +188,7 @@ public class MainPageController {
         BookEntity book = bookService.get(bookId);
         long totalRating = book.getTotalRating() + rating;
         long totalVoteCount = book.getTotalVoteCount() + 1;
-        int avgRating = Long.valueOf(totalRating / totalVoteCount).intValue();
+        int avgRating = (int) Math.round(totalRating * 1.0 / totalVoteCount);
         bookService.updateRating(bookId, totalRating, totalVoteCount, avgRating);
 
         redirectAttr.addFlashAttribute("ShowRatingMessWindow", true);

@@ -127,6 +127,8 @@ public class BookEntityController {
         OutputStream os = response.getOutputStream();
         os.write(contentBytes);
         os.close();
+
+        bookService.updateViewCount(id, book.getViewCount() + 1);
     }
 
     /** Вспомогательные методы контроллера */

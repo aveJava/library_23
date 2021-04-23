@@ -31,6 +31,7 @@ public interface BookEntityRepo extends JpaRepository<BookEntity, Long> {
 
     // обновляет количество просмотров книги по id
     @Modifying(clearAutomatically = true)
+    @Transactional
     @Query("update BookEntity b set b.viewCount=:viewCount where b.id=:id")
     void updateViewCount(@Param("id") long id, @Param("viewCount") long viewCount);
 

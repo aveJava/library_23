@@ -12,7 +12,7 @@
 
                 <!-- Лейбл, справочники, добавление книги -->
                 <div class="col-5" style="padding-left: 12vw; margin-top: -3px;">
-                    <img class="logoImg" th:src="@{/static/images/books.png}" dataURI="true"/>
+                    <img class="logoImg" th:src="@{/static/images/books.png}" dataURI="true" onclick="location.href='/main_search?type=all'"/>
                     <a href="" class="btn btn-dark navButton">Справочники</a>
                     <a href="/books/new" class="btn btn-dark navButton">Добавить книгу</a>
                 </div>
