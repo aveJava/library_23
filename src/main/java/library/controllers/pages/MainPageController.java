@@ -181,6 +181,24 @@ public class MainPageController {
         return "redirect:/";
     }
 
+
+    // Рейтинг                          GET:  /MainPage/Rating?bookId=15&rating=4
+    @GetMapping("/MainPage/Rating")
+    public String fixRating(@RequestParam("bookId") long bookId, @RequestParam("rating") int rating, RedirectAttributes redirectAttr) {
+        BookEntity book = bookService.get(bookId);
+        long totalRating = book.getTotalRating() + rating;
+        long totalVoteCount = book.getTotalVoteCount() + 1;
+        int avgRating = Long.valueOf(totalRating / totalVoteCount).intValue();
+        bookService.updateRating(bookId, totalRating, totalVoteCount, avgRating);
+
+        redirectAttr.addFlashAttribute("ShowRatingMessWindow", true);
+        String label = rating == 1 ? "1 звезда" : rating > 1 && rating < 5 ? rating + " звезды" : "5 звезд";
+        redirectAttr.addFlashAttribute("RatingLabel", label);
+
+        return "redirect:/";
+    }
+
+
     // Показывает диалог удаления книги (модальное окно)
     @GetMapping("/books/{id}/showDeleteDialog")
     public String showDeleteDialog(@PathVariable("id") long id, RedirectAttributes redirectAttr) {

@@ -41,10 +41,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-8" style="padding: 0 0 0 0.5vw; margin-top: -0.15vw; position: relative; z-index: 1;">
+                                    <div class="col-8" style="padding: 0 0 0 0.6vw; margin-top: -0.15vw; position: relative; z-index: 1;">
+
+                                        <div>
+                                        </div>
 
                                         <fieldset class="rating">
 
+                                            <!-- Отображение текущего рейтинга -->
+                                            <label th:if="${book.getAvgRating()} > 0" class = "full curRat" style="margin: 0vw;"></label>
+                                            <label th:if="${book.getAvgRating()} > 1" class = "full curRat" style="margin: 0 1.25vw;"></label>
+                                            <label th:if="${book.getAvgRating()} > 2" class = "full curRat" style="margin: 0 2.5vw;"></label>
+                                            <label th:if="${book.getAvgRating()} > 3" class = "full curRat" style="margin: 0 3.75vw;"></label>
+                                            <label th:if="${book.getAvgRating()} > 4" class = "full curRat" style="margin: 0 5vw;"></label>
+
+                                            <!-- Звездный рейтинг -->
                                             <label class = "full" th:for="'star5b' + ${book.getId()}" title="Awesome - 5 stars"></label>
                                             <input type="radio" th:id="'star5b' + ${book.getId()}" name="rating" value="5" th:onclick="'location.href=\'/MainPage/Rating?bookId=' + ${book.getId()} + '&rating=5\''"/>
 

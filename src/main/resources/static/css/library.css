@@ -130,15 +130,14 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
 fieldset, label { margin: 0; padding: 0; }
-body{ margin: 20px; }
-h1 { font-size: 1.5em; margin: 10px; }
+h1 { font-size: 1.5em; margin: 0.5vw; }
 .rating {
     border: none;
     float: left;
 }
 .rating > input { display: none; }
 .rating > label:before {
-    margin: 5px;
+    margin: 0.25vw;
     font-size: 0.8vw;
     font-family: FontAwesome;
     display: inline-block;
@@ -159,6 +158,15 @@ h1 { font-size: 1.5em; margin: 10px; }
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+
+/* на отображение текущего рейтинга */
+.rating:hover .curRat{      /* при наведении указателя на элемент класса rating, */
+    display: none;          /* все элементы класса curRat, будут скрыты (display: none;) */
+}
+.rating > .curRat {
+    color: #FFD700;
+    position: absolute;
+}
 
 
 /* Toolbar */

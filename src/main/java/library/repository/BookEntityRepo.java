@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,8 +36,9 @@ public interface BookEntityRepo extends JpaRepository<BookEntity, Long> {
 
     // обновляет данные рейтинга книги по id
     @Modifying(clearAutomatically = true)
+    @Transactional
     @Query("update BookEntity b set b.totalRating=:tRating, b.totalVoteCount=:tVoteCount, b.avgRating=:avgRating where b.id=:id")
-    void updateRating(@Param("id") long id, @Param("tRating") long tRating, @Param("tVoteCount") long tVoteCount, @Param("avgRating") long avgRating);
+    void updateRating(@Param("id") long id, @Param("tRating") long tRating, @Param("tVoteCount") long tVoteCount, @Param("avgRating") int avgRating);
 
     // Для топовых книг показываем только изображение (в классе Book должен быть соответствующий конструктор)
     @Query("select new BookEntity(b.id, b.image) from BookEntity b")
