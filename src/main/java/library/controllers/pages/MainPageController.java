@@ -184,7 +184,7 @@ public class MainPageController {
 
     // Рейтинг                          GET:  /MainPage/Rating?bookId=15&rating=4
     @GetMapping("/MainPage/Rating")
-    public String fixRating(@RequestParam("bookId") long bookId, @RequestParam("rating") int rating, RedirectAttributes redirectAttr) {
+    public String registerVoice(@RequestParam("bookId") long bookId, @RequestParam("rating") int rating, RedirectAttributes redirectAttr) {
         BookEntity book = bookService.get(bookId);
         long totalRating = book.getTotalRating() + rating;
         long totalVoteCount = book.getTotalVoteCount() + 1;
