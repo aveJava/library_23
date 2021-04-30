@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "security_user")
 @EqualsAndHashCode(of = "id")
 @Getter @Setter
 @DynamicUpdate
@@ -33,12 +33,12 @@ public class UserEntity implements UserDetails {
     @Size(min=8, message = "Пароль должен содержать не меньше 8 знаков")
     private String password;
 
-    private boolean enabled = true;
+    private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "security_user_roles",
                 joinColumns = @JoinColumn (name = "user_id"),
-                inverseJoinColumns = @JoinColumn (name = "role_id"))
+                inverseJoinColumns = @JoinColumn (name = "authority"))
     private Set<RoleEntity> roles;
 
 
@@ -52,6 +52,10 @@ public class UserEntity implements UserDetails {
 
     @Transient
     private String newPassword;
+
+    @Transient
+    private String formStage;   // стадия заполнения формы (предполагается, что сначала пользователь выбирает имя, потом пароль)
+                                // new - ничего не заполнено, username - было введено имя, password - было введено имя и пароль
 
 
     public void addNewRole(RoleEntity role) {

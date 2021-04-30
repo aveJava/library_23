@@ -6,12 +6,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "role")
+@Table(name = "security_role")
 @EqualsAndHashCode(of = "name")
 @DynamicUpdate
 @DynamicInsert
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 public class RoleEntity implements GrantedAuthority {
 
     @Id
+    @Column(name = "role")
     private String name;
 
     // GrantedAuthority overridden method
