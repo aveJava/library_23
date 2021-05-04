@@ -59,12 +59,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .disable()
 
                 // настройка прав доступа к ресурсам (такие-то url будут доступны для таких-то ролей)
-                .authorizeRequests()
+                .authorizeRequests()            // возвращает конфигуратор ограничений доступа
                     // адреса, доступные только админам и суперадминам
                     .antMatchers("/books/**", "/admin", "/red").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPERADMIN")
-                    // просмотр содержимого книг и голосование доступны только аутентифицированным пользователям
-                    .antMatchers("/books/content", "/MainPage/Rating").authenticated()// возвращает конфигуратор ограничений доступа
-                    .anyRequest().permitAll()           // ко всем остальным страницам разрешить доступ всем
+                    // просмотр содержимого книг разрешен только user'ам, admin'ам и superadmin'ам
+                    .antMatchers("/books/content", "/main_page/viewing/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_SUPERADMIN")
+                    // голосование доступно только аутентифицированным пользователям
+                    .antMatchers("/main_page/rating").authenticated()
+                    // ко всем остальным страницам разрешить доступ всем
+                    .anyRequest().permitAll()
                     .and()
 
                 // обработка ошибок доступа
@@ -77,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")                // адрес страницы входа в систему
                     .usernameParameter("username")      // имя поля для ввода имени пользователя
                     .passwordParameter("password")      // имя поля для ввода пароля
-                    .defaultSuccessUrl("/")             // куда перенаправить в случае успешного входа (если пользователь никуда не пытался попасть)
+                    .defaultSuccessUrl("/main_page")    // куда перенаправить в случае успешного входа (если пользователь никуда не пытался попасть)
                     .failureUrl("/login?error=true")    // куда перенаправить в случае неудачи
                     .permitAll()                        // разрешить всем доступ к formLogin
                     .and()
@@ -93,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // настройка выхода пользователя из системы
                 .logout()
                     .logoutUrl("/logout")           // url, запускающий выход из системы
-                    .logoutSuccessUrl("/")          // страница, на которую будет перенаправлен пользоваетль после выхода
+                    .logoutSuccessUrl("/main_page") // страница, на которую будет перенаправлен пользоваетль после выхода
                     .deleteCookies("JSESSIONID", "SPRING_SECURITY_REMEMBER_MY_COOKIE")  // удалить cookie после выхода
                     .invalidateHttpSession(true)    // удалить сессию после выхода
                     .permitAll();                   // разрешить всем доступ к странице logout
