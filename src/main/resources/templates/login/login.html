@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
+    <link href="/static/css/login/login.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="login">
+        <form method="post" th:action="${#request.contextPath} + '/login'" name='form-login' style="margin-top: 30vh;">
+            <th:block th:if="${errorMsg != null}">
+                <p th:text="${errorMsg}" style="position: absolute; margin-top: -5px; color: brown;"></p>
+            </th:block>
+            <span class="fontawesome-user" style="margin-top: 25px"></span>
+            <input type="text" name="username" id="user" placeholder="Имя" style="margin-top: 25px">
+
+            <span class="fontawesome-lock"></span>
+            <input type="password" name="password" id="pass" placeholder="Пароль">
+
+            <input type="submit" value="Login">
+
+            <div style="display: flex; margin-top: 15px; margin-bottom: -5px;">
+                <input type="checkbox" name="rememberMe" id="rememberMe" style="width: 15px; height: 15px; background-color: floralwhite;">
+                <label for="rememberMe" style="padding-left: 3px;">Запомнить меня</label>
+                <a id="reg" href="/registration">Регистрация</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
