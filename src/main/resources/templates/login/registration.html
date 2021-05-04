@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
+    <link href="/static/css/login/login.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="login">
+        <form method="post" action="/registration" name='form-login' th:object="${user}" style="margin-top: 35vh;">
+
+            <!-- сообщение об ошибке (если есть) -->
+            <div th:if="${hasErrors}">
+                <p th:text="${errorMsg}"></p>
+            </div>
+
+            <!-- стадия выбора имени -->
+            <div th:if="${user.getFormStage()} == 'username'">
+                <span class="fontawesome-user"></span>
+                <input type="text" th:field="*{username}" id="user"
+                       placeholder="Имя" readonly onfocus="this.removeAttribute('readonly')">
+
+                <input type="hidden" name="formStage" value="username">
+                <input type="submit" value="Выбрать имя">
+            </div>
+
+            <!-- стадия выбора пароля -->
+            <div th:if="${user.getFormStage()} == 'password'">
+                <span class="fontawesome-lock"></span>
+                <input type="password" id="pass" name="password"
+                       th:value="${displayPasswordValue} ? ${user.getPassword()} : ''"
+                       placeholder="Пароль" readonly onfocus="this.removeAttribute('readonly')">
+                       <!-- атрибуты readonly и onfocus добавляются, чтобы браузер не пытался сделать автозаполнение -->
+
+                <span class="fontawesome-lock"></span>
+                <input type="password" name="passwordConfirm" id="confirmPass"
+                       placeholder="Повторите пароль" readonly onfocus="this.removeAttribute('readonly')">
+
+                <input type="hidden" th:field="*{username}">
+                <input type="hidden" name="formStage" value="password">
+                <input type="submit" value="Установить пароль">
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>
