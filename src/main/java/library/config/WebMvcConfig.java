@@ -1,14 +1,18 @@
 package library.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebMvc
@@ -20,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         this.applicationContext = applicationContext;
     }
 
-    // бины, отвечающие за конфигурацию шаблонизатора thymeleaf
+    // бин, отвечающие за конфигурацию шаблонизатора thymeleaf
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -29,6 +33,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         templateResolver.setSuffix(".html");                    // расширение представлений
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
+    }
+
+    // фильтр скрытых полей, позволяющий использовать методы PUT, PATCH, DELETE и прочие
+    @Bean
+    public FilterRegistrationBean hiddenHttpMethodFilter() {
+        FilterRegistrationBean filterRegBean = new FilterRegistrationBean(new HiddenHttpMethodFilter());
+        filterRegBean.setUrlPatterns(Arrays.asList("/*"));
+        return filterRegBean;
     }
 
     @Override
