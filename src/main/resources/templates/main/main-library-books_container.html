@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>BooksContainer</title>
@@ -77,17 +78,10 @@
                                 </div>
 
                                 <!-- Редактирование и удаление -->
-                                <div class="row">
-                                    <div class="col" style="text-align: right; position: relative; z-index: 1">
-                                        <a th:href="'/books/' + ${book.getId} + '/edit'" style="text-decoration: none;">
-                                            <img src="static/images/edit.png" class="myBookCardEditButton">
-                                        </a>
-                                        <a th:href="@{/books/{id}/showDeleteDialog (id = ${book.getId})}" style="text-decoration: none;">
-                                            <img src="static/images/delete.png" class="myBookCardDeleteButton">
-                                        </a>
-                                    </div>
+                                <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="row" style="justify-content: flex-end; margin: 0.3vw 0 0.1vw;">
+                                    <img src="static/images/edit.png" class="myBookCardEditButton" th:onclick="'location.href=\'/books/' + ${book.getId} + '/edit\''">
+                                    <img src="static/images/delete.png" class="myBookCardDeleteButton" th:onclick="'location.href=\'/books/' + ${book.getId} + '/showDeleteDialog\''">
                                 </div>
-
                             </div>
                         </div>
                     </th:block>

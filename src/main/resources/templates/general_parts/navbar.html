@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Navbar</title>
@@ -13,8 +14,10 @@
                 <!-- Лейбл, справочники, добавление книги -->
                 <div class="col-5" style="padding-left: 12vw; margin-top: -3px;">
                     <img class="logoImg" th:src="@{/static/images/books.png}" dataURI="true" onclick="location.href='/main_search?type=all'"/>
-                    <a href="" class="btn btn-dark navButton">Справочники</a>
-                    <a href="/books/new" class="btn btn-dark navButton">Добавить книгу</a>
+                    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
+                       href="">Справочники</a>
+                    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
+                       href="/books/new">Добавить книгу</a>
                 </div>
                 <!-- Языки, поиск -->
                 <div class="col-4" style="display: flex; justify-content: flex-end;">
@@ -27,13 +30,20 @@
                 </div>
                 <!-- Текущий пользователь -->
                 <div class="col-2" style="text-align: right; padding: 0;">
-                    <a href="" class="btn btn-dark navButton myNavbarUserButton" style="">Добро пожаловать: user</a>
+                    <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"
+                       href="/registration" class="btn btn-dark navButton myNavbarUserButton">Зарегистрироваться</a>
+                    <p th:if="${userController} != null AND ${userController.getCurrentUser()} != null"
+                       class="btn btn-dark navButton myNavbarUserButton"
+                       style="display: table-cell; text-align: right; width: 16vw; padding: 12px 0;"
+                       th:text="'Добро пожаловать: ' + ${userController.getCurrentUser().getUsername()}"></p>
                 </div>
                 <!-- Выход -->
                 <div class="col-1" style="text-align: left; padding: 0;">
-                    <a href="" class="btn btn-dark navButton myNavbarExitButton" style="">Выйти</a>
+                    <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"
+                       href="/login" class="btn btn-dark navButton myNavbarExitButton">Войти</a>
+                    <a th:if="${userController} != null AND ${userController.getCurrentUser()} != null"
+                       href="/logout" class="btn btn-dark navButton myNavbarExitButton">Выйти</a>
                 </div>
-
             </div>
         </div>
 
