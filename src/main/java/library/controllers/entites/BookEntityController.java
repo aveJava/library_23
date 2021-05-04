@@ -50,7 +50,7 @@ public class BookEntityController {
         redirectAttr.addFlashAttribute("ShowEditModelWindow", true);
         redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());
         redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
     // Создает новую книгу
@@ -62,7 +62,7 @@ public class BookEntityController {
         redirectAttr.addFlashAttribute("actionMethod", "POST");     // метод, которым отправлять форму после редактирования
         redirectAttr.addFlashAttribute("actionURL", "/books");      // адрес, на который отправлять
 
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
     // Отправляет форму на редактирование книги
@@ -75,7 +75,7 @@ public class BookEntityController {
         redirectAttr.addFlashAttribute("actionMethod", "PATCH");
         redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());
         redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
     // Обновляет книгу (принимает заполненную форму на редактирование)
@@ -88,14 +88,14 @@ public class BookEntityController {
         redirectAttr.addFlashAttribute("actionMethod", "PATCH");                     // метод, которым отправлять форму после редактирования
         redirectAttr.addFlashAttribute("actionURL", "/books/" + model.getId());      // адрес, на который отправлять
 
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
     // Удаляет книгу
     @DeleteMapping("/books/{id}")
     public String deleteBook(@PathVariable("id") long id) {
         bookService.delete(bookService.get(id));
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
 

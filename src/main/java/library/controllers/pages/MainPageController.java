@@ -1,7 +1,7 @@
 package library.controllers.pages;
 
+import library.controllers.security.UserController;
 import library.domain.BookEntity;
-import library.model.BookModel;
 import library.service.AuthorEntityService;
 import library.service.BookEntityService;
 import library.service.GenreEntityService;
@@ -10,24 +10,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 
 /** Контроллер, отвечающий за отображение главной страницы */
 @Controller
+@RequestMapping("/main_page")
 public class MainPageController {
     /** Инстансы используемых сервисов */
     AuthorEntityService authorService;
     BookEntityService bookService;
     GenreEntityService genreService;
     PublisherEntityService publisherService;
+    UserController userController;
 
     /** Состояние библиотеки */
     List<BookEntity> topBooks;      // топ книг (отображается на полке)
@@ -42,11 +43,13 @@ public class MainPageController {
     String[] keywords;              // ключевые слова поиска (для поиска по keywords)
 
     public MainPageController(AuthorEntityService authorService, BookEntityService bookService,
-                              GenreEntityService genreService, PublisherEntityService publisherService) {
+                              GenreEntityService genreService, PublisherEntityService publisherService,
+                              UserController userController) {
         this.authorService = authorService;
         this.bookService = bookService;
         this.genreService = genreService;
         this.publisherService = publisherService;
+        this.userController = userController;
 
         // настройки первого посещения (отображаем все книги, первую страницу, 10 элементов на странице)
         pageNumber = 1;
@@ -55,7 +58,7 @@ public class MainPageController {
     }
 
     // отображает главную страницу согласно ее текущему состоянию
-    @GetMapping("/")
+    @GetMapping()
     public String baseUrlRedirect(Model model) {
         // формирование отображаемого контента
         topBooks = bookService.findTopBooks(5);    // выполняет поиск топовых книг
@@ -70,12 +73,13 @@ public class MainPageController {
         model.addAttribute("pageSize", MainPageController.pageSize);
         model.addAttribute("totalElements", MainPageController.totalElements);
         model.addAttribute("SearchMessage", getSearchMessage());
+        model.addAttribute("userController", userController);
 
         return "pages/main";
     }
 
     // слушает запросы на поиск книг (и меняет параметры поиска согласно полученному запросу)
-    @GetMapping("/main_search")
+    @GetMapping("/search")
     public String changeSearch(@RequestParam("type") String type,
                                @RequestParam(value = "keywords", required = false) String keywords,
                                @RequestParam(value = "genreId", required = false) Integer genreId) {
@@ -94,7 +98,7 @@ public class MainPageController {
                 break;
         }
 
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
     // выполняет поиск книг согласно текущим параметрам поиска, записывает результат в this.pageBooks
@@ -150,7 +154,7 @@ public class MainPageController {
     }
 
     // слушает кнопки toolbar'а, перелистывает страницу результатов или меняет ее размер
-    @GetMapping("/Toolbar/{button}")
+    @GetMapping("/toolbar/{button}")
     public String toolbar(@PathVariable("button") String button,
                           @RequestParam(value = "title", required = false) String title,
                           @RequestParam(value = "size", required = false) Integer size) {
@@ -178,12 +182,12 @@ public class MainPageController {
             pageSize = size;
         }
 
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
 
-    // Рейтинг                          GET:  /MainPage/Rating?bookId=15&rating=4
-    @GetMapping("/MainPage/Rating")
+    // Рейтинг                  GET:  /main_page/rating?bookId=15&rating=4
+    @GetMapping("/rating")
     public String registerVoice(@RequestParam("bookId") long bookId, @RequestParam("rating") int rating, RedirectAttributes redirectAttr) {
         BookEntity book = bookService.get(bookId);
         long totalRating = book.getTotalRating() + rating;
@@ -195,26 +199,26 @@ public class MainPageController {
         String label = rating == 1 ? "1 звезда" : rating > 1 && rating < 5 ? rating + " звезды" : "5 звезд";
         redirectAttr.addFlashAttribute("RatingLabel", label);
 
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
 
     // Показывает диалог удаления книги (модальное окно)
-    @GetMapping("/books/{id}/showDeleteDialog")
-    public String showDeleteDialog(@PathVariable("id") long id, RedirectAttributes redirectAttr) {
+    @GetMapping("/deleteDialog")
+    public String showDeleteDialog(@RequestParam("id") long id, RedirectAttributes redirectAttr) {
         redirectAttr.addFlashAttribute("ShowDeleteModelWindow", true);
         redirectAttr.addFlashAttribute("bookId", id);
         redirectAttr.addFlashAttribute("bookName", bookService.get(id).getName());
 
-        return "redirect:/";
+        return "redirect:/main_page";
     }
 
     // Принимает запрос на показ содержания книги
-    @GetMapping("/books/{id}/PDF_Content")
+    @GetMapping("/viewing/{id}")
     public String getContent(@PathVariable("id") int id) {
         byte[] content = bookService.get(id).getContent();
         if (content != null && content.length > 0) {
-            return "forward:/books/content?id=" + id;
+            return "redirect:/books/content?id=" + id;
         } else {
             return "redirect:/errors?name=pdf_not_found";
         }

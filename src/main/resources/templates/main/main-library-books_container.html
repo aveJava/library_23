@@ -23,7 +23,7 @@
 
                         <!-- Карточка книги -->
                         <div class="card myBookCard effect8">
-                            <a th:href="@{books/{id}/PDF_Content (id=${book.getId()})}" class="stretched-link"></a>
+                            <a th:href="@{/main_page/viewing/{id} (id=${book.getId()})}" class="stretched-link"></a>
                             <img th:src="'http://localhost:8080/books/img?id=' + ${book.getId()}" class="myBookCardImage">
                             <div class="card-body" style="padding: 0.2vw 0.5vw;">
 
@@ -58,19 +58,19 @@
 
                                             <!-- Звездный рейтинг -->
                                             <label class = "full" th:for="'star5b' + ${book.getId()}" title="Awesome - 5 stars"></label>
-                                            <input type="radio" th:id="'star5b' + ${book.getId()}" name="rating" value="5" th:onclick="'location.href=\'/MainPage/Rating?bookId=' + ${book.getId()} + '&rating=5\''"/>
+                                            <input type="radio" th:id="'star5b' + ${book.getId()}" name="rating" value="5" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=5\''"/>
 
                                             <label class = "full" th:for="'star4b' + ${book.getId()}" title="Pretty good - 4 stars"></label>
-                                            <input type="radio" th:id="'star4b' + ${book.getId()}" name="rating" value="4" th:onclick="'location.href=\'/MainPage/Rating?bookId=' + ${book.getId()} + '&rating=4\''"/>
+                                            <input type="radio" th:id="'star4b' + ${book.getId()}" name="rating" value="4" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=4\''"/>
 
                                             <label class = "full" th:for="'star3b' + ${book.getId()}" title="Meh - 3 stars"></label>
-                                            <input type="radio" th:id="'star3b' + ${book.getId()}" name="rating" value="3" th:onclick="'location.href=\'/MainPage/Rating?bookId=' + ${book.getId()} + '&rating=3\''"/>
+                                            <input type="radio" th:id="'star3b' + ${book.getId()}" name="rating" value="3" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=3\''"/>
 
                                             <label class = "full" th:for="'star2b' + ${book.getId()}" title="Kinda bad - 2 stars"></label>
-                                            <input type="radio" th:id="'star2b' + ${book.getId()}" name="rating" value="2" th:onclick="'location.href=\'/MainPage/Rating?bookId=' + ${book.getId()} + '&rating=2\''"/>
+                                            <input type="radio" th:id="'star2b' + ${book.getId()}" name="rating" value="2" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=2\''"/>
 
                                             <label class = "full" th:for="'star1b' + ${book.getId()}" title="Sucks big time - 1 star"></label>
-                                            <input type="radio" th:id="'star1b' + ${book.getId()}" name="rating" value="1" th:onclick="'location.href=\'/MainPage/Rating?bookId=' + ${book.getId()} + '&rating=1\''"/>
+                                            <input type="radio" th:id="'star1b' + ${book.getId()}" name="rating" value="1" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=1\''"/>
 
                                         </fieldset>
 
@@ -80,7 +80,7 @@
                                 <!-- Редактирование и удаление -->
                                 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="row" style="justify-content: flex-end; margin: 0.3vw 0 0.1vw;">
                                     <img src="static/images/edit.png" class="myBookCardEditButton" th:onclick="'location.href=\'/books/' + ${book.getId} + '/edit\''">
-                                    <img src="static/images/delete.png" class="myBookCardDeleteButton" th:onclick="'location.href=\'/books/' + ${book.getId} + '/showDeleteDialog\''">
+                                    <img src="static/images/delete.png" class="myBookCardDeleteButton" th:onclick="'location.href=\'/main_page/deleteDialog?id=' + ${book.getId} + '\''">
                                 </div>
                             </div>
                         </div>

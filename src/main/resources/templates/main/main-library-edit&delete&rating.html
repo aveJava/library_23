@@ -241,8 +241,8 @@
                         </div>
                         <!-- Футер -->
                         <div class="modal-footer" style="display: table-footer-group; text-align: end;">
-                            <form th:action="@{/books/{id} (id=${bookId})}" method="POST">
-                                <input type="hidden" name="_method" value="delete">
+                            <form th:action="@{/books/{id} (id=${bookId})}" th:method="DELETE">
+<!--                                <input type="hidden" name="_method" value="delete">-->
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  style="margin-right: 1%;">Отмена</button>
                                 <button type="submit" class="btn btn-primary" style="margin-right: 4%;">Удалить</button>
                             </form>

@@ -23,7 +23,7 @@
                 <div class="col-2">
                     <div class="btn-toolbar center-block" style="margin-top: 3%;">
                         <div class="btn-group me-2" role="group" aria-label="Second group">
-                            <form class="myToolbar" action="Toolbar/NumberButtons" method="get">
+                            <form class="myToolbar" action="/main_page/toolbar/NumberButtons" method="get">
                                 <input type="submit" class="btn btn-secondary btnBar" name="title" value="<<"/>
                                 <input type="submit" class="btn btn-secondary btnBar" name="title" value="<"/>
                                 <div class="btn btn-secondary btnBar" th:text="${thisPage}"></div>
@@ -42,10 +42,10 @@
                             <th:block th:text="${pageSize}"></th:block>
                         </button>
                         <ul class="dropdown-menu" style="max-width: 30px">
-                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=5">5</a></li>
-                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=10">10</a></li>
-                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=15">15</a></li>
-                            <li><a class="dropdown-item" href="Toolbar/PageSize?size=20">20</a></li>
+                            <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=5">5</a></li>
+                            <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=10">10</a></li>
+                            <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=15">15</a></li>
+                            <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=20">20</a></li>
                         </ul>
                     </div>
                 </div>
