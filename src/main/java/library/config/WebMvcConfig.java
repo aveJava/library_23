@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,7 +14,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc - как правило не требуется в приложениях SpringBoot. При определенных условиях конфликтует с @SpringBootApplication
 public class WebMvcConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
 
