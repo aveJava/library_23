@@ -15,34 +15,34 @@
                 <div class="col-5" style="padding-left: 12vw; margin-top: -3px;">
                     <img class="logoImg" th:src="@{/static/images/books.png}" dataURI="true" onclick="location.href='/main_page/search?type=all'"/>
                     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
-                       href="">Справочники</a>
+                       href="" th:text="#{dict}">Справочники</a>
                     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
-                       href="/books/new">Добавить книгу</a>
+                       href="/books/new" th:text="#{add_book}">Добавить книгу</a>
                 </div>
                 <!-- Языки, поиск -->
                 <div class="col-4" style="display: flex; justify-content: flex-end;">
-                    <a href="" class="btn btn-dark navButton" style="display: inline-block;">Рус</a>
-                    <a href="" class="btn btn-dark navButton" style="display: inline-block; margin: 0 1vw 0 -0.5vw;">Анг</a>
+                    <a href="/?lang=ru" class="btn btn-dark navButton" style="display: inline-block;" th:text="#{ru}">Рус</a>
+                    <a href="/?lang=en" class="btn btn-dark navButton" style="display: inline-block; margin: 0 1vw 0 -0.5vw;" th:text="#{en}">Анг</a>
                     <form class="d-flex" th:method="GET" th:action="@{/main_page/search}" style="display: inline-block;">
                         <input type="hidden" name="type" value="keywords">
-                        <input type="search" class="form-control me-2 myNavbarSearch" placeholder="Поиск" name="keywords">
+                        <input type="search" class="form-control me-2 myNavbarSearch" th:placeholder="#{search}" name="keywords">
                     </form>
                 </div>
                 <!-- Текущий пользователь -->
                 <div class="col-2" style="text-align: right; padding: 0;">
                     <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"
-                       href="/registration" class="btn btn-dark navButton myNavbarUserButton">Зарегистрироваться</a>
+                       href="/registration" class="btn btn-dark navButton myNavbarUserButton" th:text="#{reg}">Зарегистрироваться</a>
                     <p th:if="${userController} != null AND ${userController.getCurrentUser()} != null"
                        class="btn btn-dark navButton myNavbarUserButton"
                        style="display: table-cell; text-align: right; width: 16vw; padding: 12px 0;"
-                       th:text="'Добро пожаловать: ' + ${userController.getCurrentUser().getUsername()}"></p>
+                       th:text="#{welcome} + ${userController.getCurrentUser().getUsername()}"></p>
                 </div>
                 <!-- Выход -->
                 <div class="col-1" style="text-align: left; padding: 0;">
                     <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"
-                       href="/login" class="btn btn-dark navButton myNavbarExitButton">Войти</a>
+                       href="/login" class="btn btn-dark navButton myNavbarExitButton" th:text="#{login}">Войти</a>
                     <a th:if="${userController} != null AND ${userController.getCurrentUser()} != null"
-                       href="/logout" class="btn btn-dark navButton myNavbarExitButton">Выйти</a>
+                       href="/logout" class="btn btn-dark navButton myNavbarExitButton" th:text="#{logout}">Выйти</a>
                 </div>
             </div>
         </div>
