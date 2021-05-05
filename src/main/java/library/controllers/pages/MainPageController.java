@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /** Контроллер, отвечающий за отображение главной страницы */
@@ -189,7 +190,7 @@ public class MainPageController {
 
     // Рейтинг                  GET:  /main_page/rating?bookId=15&rating=4
     @GetMapping("/rating")
-    public String registerVoice(@RequestParam("bookId") long bookId, @RequestParam("rating") int rating, RedirectAttributes redirectAttr) {
+    public String registerVoice(@RequestParam("bookId") long bookId, @RequestParam("rating") int rating, RedirectAttributes redirectAttr, Locale loc) {
         BookEntity book = bookService.get(bookId);
         long totalRating = book.getTotalRating() + rating;
         long totalVoteCount = book.getTotalVoteCount() + 1;
@@ -197,7 +198,9 @@ public class MainPageController {
         bookService.updateRating(bookId, totalRating, totalVoteCount, avgRating);
 
         redirectAttr.addFlashAttribute("ShowRatingMessWindow", true);
-        String label = rating == 1 ? "1 звезда" : rating > 1 && rating < 5 ? rating + " звезды" : "5 звезд";
+        String label = null;
+        if ("ru".equals(loc.toString())) label = rating == 1 ? "1 звезда" : rating > 1 && rating < 5 ? rating + " звезды" : "5 звезд";
+        if ("en".equals(loc.toString())) label = rating == 1 ? "1 star" : rating + " stars";
         redirectAttr.addFlashAttribute("RatingLabel", label);
 
         return "redirect:/main_page";

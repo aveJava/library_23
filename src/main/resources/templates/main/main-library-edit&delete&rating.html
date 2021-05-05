@@ -277,7 +277,7 @@
                     <div class="modal-content">
                         <!-- Заголовок -->
                         <div class="modal-header">
-                            <h5 class="modal-title" id="DeleteModalLabel" th:text="${RatingLabel}">Заголовок (сколько звезд)</h5>
+                            <h5 class="modal-title" id="VoteLabel" th:text="${RatingLabel}">Заголовок (сколько звезд)</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Содержание -->
@@ -288,7 +288,7 @@
                                         <img src="static/images/thank.png" style="width: 1.5vw; display: inline-block;">
                                     </div>
                                     <div class="col-11">
-                                        Спасибо, что проголосовали!
+                                        <th:block th:text="#{voted}">Спасибо, что проголосовали!</th:block>
                                     </div>
                                 </div>
                             </div>
