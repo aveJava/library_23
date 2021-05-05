@@ -73,6 +73,7 @@ public class MainPageController {
         model.addAttribute("pageSize", MainPageController.pageSize);
         model.addAttribute("totalElements", MainPageController.totalElements);
         model.addAttribute("SearchMessage", getSearchMessage());
+        model.addAttribute("genreId", searchType == SearchType.SEARCH_GENRE ? genreId : -1);
         model.addAttribute("userController", userController);
 
         return "pages/main";
