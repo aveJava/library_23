@@ -49,7 +49,7 @@
                         <!-- Заголовок -->
                         <div class="modal-header">
                             <h5 th:unless="${EditableBook.getId()} == null" class="modal-title" id="EditModalLabel" th:text="${EditableBook.getName()}">Modal title</h5>
-                            <h5 th:if="${EditableBook.getId()} == null" class="modal-title" id="EditModalLabel" th:text="'Новая книга'">Modal title for create new book</h5>
+                            <h5 th:if="${EditableBook.getId()} == null" class="modal-title" id="EditModalLabel" th:text="#{new_book}">Modal title for create new book</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Содержание -->
@@ -73,9 +73,9 @@
                                                     <input type="file" form="EditBookForm" name="uploadedImage" id="cover" accept="image/jpeg, image/png, image/gif" style="display:none;"/>
                                                     <button class="bntUpload" id="bntUpload">
                                                         <img src="static/images/addImg.png" style="width: 1.1vw;">
-                                                        Загрузить
+                                                        <th:block th:text="#{load}">Загрузить</th:block>
                                                     </button>
-                                                    <span class="selectedFilenameArea" id="selected_filename">Выберите файл ...</span>
+                                                    <span class="selectedFilenameArea" id="selected_filename" th:text="#{image_load}">Выберите файл ...</span>
                                                 </div>
                                                 <!-- Костыль, необходимый для загрузки контента -->
                                                 <input type="file" form="EditBookForm" name="uploadedContent" id="content" accept="application/pdf" style="display:none;"/>
@@ -100,12 +100,12 @@
                                         <form enctype="multipart/form-data" th:action="${actionURL}" th:method="${actionMethod}" th:object="${EditableBook}" id="EditBookForm">
                                             <input type="hidden" name="_method" value="patch" th:if="${actionMethod} == 'PATCH'">
                                             <div class="row">
-                                                <label for="name" class="form-label editFieldLabel">Название</label>
+                                                <label for="name" class="form-label editFieldLabel" th:text="#{subj_name}">Название</label>
                                                 <input type="text" class="form-control editFieldInput" th:field="*{name}" id="name">
                                             </div>
                                             <!-- Author -->
                                             <div class="row">
-                                                <label for="author" class="form-label editFieldLabel">Автор</label>
+                                                <label for="author" class="form-label editFieldLabel" th:text="#{author}">Автор</label>
                                                 <select class="form-select editFieldInput" id="author" name="author" aria-describedby="validationServer04Feedback" required>
                                                     <option selected style="display: none;">
                                                         <th:block th:text="${EditableBook.getAuthor}"></th:block>
@@ -117,7 +117,7 @@
                                             </div>
                                             <!-- Genre -->
                                             <div class="row">
-                                                <label for="genre" class="form-label editFieldLabel">Жанр</label>
+                                                <label for="genre" class="form-label editFieldLabel" th:text="#{genre}">Жанр</label>
                                                 <select class="form-select editFieldInput" id="genre" name="genre" aria-describedby="validationServer04Feedback" required>
                                                     <option selected style="display: none;">
                                                         <th:block th:text="${EditableBook.getGenre}"></th:block>
@@ -129,7 +129,7 @@
                                             </div>
                                             <!-- Publisher -->
                                             <div class="row">
-                                                <label for="publisher" class="form-label editFieldLabel">Издатель</label>
+                                                <label for="publisher" class="form-label editFieldLabel" th:text="#{publisher}">Издатель</label>
                                                 <select class="form-select editFieldInput" id="publisher" name="publisher" aria-describedby="validationServer04Feedback" required>
                                                     <option selected style="display: none;">
                                                         <th:block th:text="${EditableBook.getPublisher}"></th:block>
@@ -146,14 +146,14 @@
                                             </div>
                                             <!-- PublishYear -->
                                             <div class="row">
-                                                <label for="publishYear" class="form-label editFieldLabel">Год</label>
+                                                <label for="publishYear" class="form-label editFieldLabel" th:text="#{year}">Год</label>
                                                 <input type="text" class="form-control editFieldInput" id="publishYear" th:field="*{publishYear}" th:unless="${EditableBook.getPublishYear()} == null">
                                                 <!-- Чтобы не отображался ноль, если это новая книга -->
                                                 <input type="text" class="form-control editFieldInput" id="publishYear" name="publishYear" th:if="${EditableBook.getPublishYear()} == null">
                                             </div>
                                             <!-- PageCount -->
                                             <div class="row">
-                                                <label for="page_count" class="form-label editFieldLabel">Кол-во страниц</label>
+                                                <label for="page_count" class="form-label editFieldLabel" th:text="#{page_count}">Кол-во страниц</label>
                                                 <input type="text" class="form-control editFieldInput" id="page_count" th:field="*{pageCount}" th:unless="${EditableBook.getPageCount()} == 0">
                                                 <!-- Чтобы не отображался ноль, если это новая книга -->
                                                 <input type="text" class="form-control editFieldInput" id="page_count" name="pageCount" th:if="${EditableBook.getPageCount()} == 0">
@@ -164,20 +164,20 @@
                                         </form>
                                         <!-- Content -->
                                         <div class="row" style="margin-top: 0.5vw;">
-                                            <label for="pseuvoInput" class="form-label editFieldLabel" style="margin-top: 0.5vw;">Контент</label>
+                                            <label for="pseuvoInput" class="form-label editFieldLabel" style="margin-top: 0.5vw;" th:text="#{content}">Контент</label>
                                             <!-- Кнопка и окно отображения файла -->
                                             <div style="margin-left: auto; width: 16.7vw; margin-right: -5%;">
                                                 <input type="file" id="pseuvoInput" style="display:none;"/>
                                                 <button class="bntUpload" id="bntPDFUpload" style="width: 14vw; margin-left: 0;">
                                                     <img src="static/images/addPDF.png" style="width: 1.1vw;">
-                                                    Загрузить
+                                                    <th:block th:text="#{load}">Загрузить</th:block>
                                                 </button>
-                                                <div class="selectedFilenameArea" id="selected_PDF_filename" style="width: 14vw; margin-left: auto; margin-right: 1.5vw; padding-left: .5vw;">Выберите файл ...</div>
+                                                <div class="selectedFilenameArea" id="selected_PDF_filename" style="width: 14vw; margin-left: auto; margin-right: 1.5vw; padding-left: .5vw;" th:text="#{content_load}">Выберите файл ...</div>
                                             </div>
                                         </div>
                                         <!-- Description -->
                                         <div class="row">
-                                            <label for="description" form="EditBookForm" class="form-label editFieldLabel" style="margin-top: 3%;">Описание</label>
+                                            <label for="description" form="EditBookForm" class="form-label editFieldLabel" style="margin-top: 3%;" th:text="#{descr}">Описание</label>
                                             <textarea type="text" form="EditBookForm" class="form-control editFieldInput" id="description" name="description" th:value="${EditableBook.getDescription()}" style="height: 5vw; resize: none;"></textarea>
                                         </div>
                                     </div>
@@ -187,8 +187,8 @@
 
                         <!-- Футер -->
                         <div class="modal-footer">
-                            <button type="button" form="EditBookForm" class="btn btn-secondary" data-bs-dismiss="modal"  style="margin-right: 1%;">Отмена</button>
-                            <button type="submit" form="EditBookForm" class="btn btn-primary" style="margin-right: 4%;">Сохранить</button>
+                            <button type="button" form="EditBookForm" class="btn btn-secondary" data-bs-dismiss="modal"  style="margin-right: 1%;" th:text="#{cancel}">Отмена</button>
+                            <button type="submit" form="EditBookForm" class="btn btn-primary" style="margin-right: 2.8%;" th:text="#{save}">Сохранить</button>
                         </div>
 
                     </div>
