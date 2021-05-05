@@ -100,7 +100,7 @@
                                         <form enctype="multipart/form-data" th:action="${actionURL}" th:method="${actionMethod}" th:object="${EditableBook}" id="EditBookForm">
                                             <input type="hidden" name="_method" value="patch" th:if="${actionMethod} == 'PATCH'">
                                             <div class="row">
-                                                <label for="name" class="form-label editFieldLabel" th:text="#{subj_name}">Название</label>
+                                                <label for="name" class="form-label editFieldLabel" th:text="#{books.title}">Название</label>
                                                 <input type="text" class="form-control editFieldInput" th:field="*{name}" id="name">
                                             </div>
                                             <!-- Author -->
