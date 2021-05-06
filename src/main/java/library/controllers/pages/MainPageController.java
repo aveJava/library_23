@@ -6,6 +6,9 @@ import library.service.AuthorEntityService;
 import library.service.BookEntityService;
 import library.service.GenreEntityService;
 import library.service.PublisherEntityService;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -43,14 +46,18 @@ public class MainPageController {
     long genreId;                   // id жанра (для поиска по жанру)
     String[] keywords;              // ключевые слова поиска (для поиска по keywords)
 
+    MessageSource messageSource;
+
     public MainPageController(AuthorEntityService authorService, BookEntityService bookService,
                               GenreEntityService genreService, PublisherEntityService publisherService,
-                              UserController userController) {
+                              UserController userController, ResourceBundleMessageSource messageSource) {
         this.authorService = authorService;
         this.bookService = bookService;
         this.genreService = genreService;
         this.publisherService = publisherService;
         this.userController = userController;
+
+        this.messageSource = messageSource;
 
         // настройки первого посещения (отображаем все книги, первую страницу, 10 элементов на странице)
         pageNumber = 1;
@@ -123,19 +130,28 @@ public class MainPageController {
 
     // формирует сообщение о критериях, по которым был выполнен поиск, показываемое пользователю
     public String getSearchMessage() {
+        // получение локализованных сообщений
+        Locale locale = LocaleContextHolder.getLocale();
+        String empty = messageSource.getMessage("empty", null, locale);
+        String found = messageSource.getMessage("found", null, locale);
+        String genre = messageSource.getMessage("genre", null, locale);
+        String search = messageSource.getMessage("search", null, locale);
+
+        // составление локализованного сообщения о критериях поиска
         String message;
-        if (totalElements == 0) message = "Ничего не найдено";
-        else message = "Найдено: " + getCorrectDeclension(totalElements);
+        if (totalElements == 0) message = empty;
+        else message = found + getCorrectDeclension(totalElements);
         switch (searchType) {
             case SEARCH_GENRE:
-                message += " (Жанр: '" + genreService.get(genreId).getName() + "')";
+                message += String.format(" (%s: '%s')", genre, genreService.get(genreId).getName());
                 break;
             case SEARCH_KEYWORDS:
+                // сборка массива ключевых слов в одну строку
                 StringBuilder mess = new StringBuilder();
                 for (int i=0; i<keywords.length; i++) {
                     mess.append(keywords[i] + " ");
                 }
-                message += " (Поиск: " + mess.toString().trim() + ")";
+                message += String.format(" (%s: %s)", search, mess.toString().trim());
                 break;
             default:
                 ;
@@ -145,6 +161,10 @@ public class MainPageController {
 
     // возвращает число найденных книг с правильным склонением слова 'книга' (вспомогательный метод)
     public String getCorrectDeclension(long digit) {
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("en".equals(locale.toString())) {
+            return digit == 1 ? "1 book" : digit + " books";
+        }
         if (digit > 99) digit = digit - (digit/100 * 100);
         if (digit<15 && digit>9) return digit + " книг";
 
