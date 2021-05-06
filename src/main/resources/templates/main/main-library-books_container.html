@@ -57,19 +57,19 @@
                                             <label th:if="${book.getAvgRating()} > 4" class = "full curRat" style="margin: 0 5vw;"></label>
 
                                             <!-- Звездный рейтинг -->
-                                            <label class = "full" th:for="'star5b' + ${book.getId()}" title="Awesome - 5 stars"></label>
+                                            <label class = "full" th:for="'star5b' + ${book.getId()}" th:title="#{1str}"></label>
                                             <input type="radio" th:id="'star5b' + ${book.getId()}" name="rating" value="5" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=5\''"/>
 
-                                            <label class = "full" th:for="'star4b' + ${book.getId()}" title="Pretty good - 4 stars"></label>
+                                            <label class = "full" th:for="'star4b' + ${book.getId()}" th:title="#{2str}"></label>
                                             <input type="radio" th:id="'star4b' + ${book.getId()}" name="rating" value="4" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=4\''"/>
 
-                                            <label class = "full" th:for="'star3b' + ${book.getId()}" title="Meh - 3 stars"></label>
+                                            <label class = "full" th:for="'star3b' + ${book.getId()}" th:title="#{3str}"></label>
                                             <input type="radio" th:id="'star3b' + ${book.getId()}" name="rating" value="3" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=3\''"/>
 
-                                            <label class = "full" th:for="'star2b' + ${book.getId()}" title="Kinda bad - 2 stars"></label>
+                                            <label class = "full" th:for="'star2b' + ${book.getId()}" th:title="#{4str}"></label>
                                             <input type="radio" th:id="'star2b' + ${book.getId()}" name="rating" value="2" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=2\''"/>
 
-                                            <label class = "full" th:for="'star1b' + ${book.getId()}" title="Sucks big time - 1 star"></label>
+                                            <label class = "full" th:for="'star1b' + ${book.getId()}" th:title="#{5str}"></label>
                                             <input type="radio" th:id="'star1b' + ${book.getId()}" name="rating" value="1" th:onclick="'location.href=\'/main_page/rating?bookId=' + ${book.getId()} + '&rating=1\''"/>
 
                                         </fieldset>
