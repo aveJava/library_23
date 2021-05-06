@@ -10,21 +10,21 @@
 
     <div id="login">
         <form method="post" th:action="${#request.contextPath} + '/login'" name='form-login' style="margin-top: 30vh;">
-            <th:block th:if="${errorMsg != null}">
-                <p th:text="${errorMsg}" style="position: absolute; margin-top: -5px; color: brown;"></p>
+            <th:block th:if="${errorMsg == 'Bad credentials!'}">
+                <p th:text="#{login_failed}" style="position: absolute; margin-top: -5px; color: brown;"></p>
             </th:block>
             <span class="fontawesome-user" style="margin-top: 25px"></span>
-            <input type="text" name="username" id="user" placeholder="Имя" style="margin-top: 25px">
+            <input type="text" name="username" id="user" th:placeholder="#{name}" style="margin-top: 25px">
 
             <span class="fontawesome-lock"></span>
-            <input type="password" name="password" id="pass" placeholder="Пароль">
+            <input type="password" name="password" id="pass" th:placeholder="#{password}">
 
-            <input type="submit" value="Login">
+            <input type="submit" th:value="#{loginBtn}">
 
             <div style="display: flex; margin-top: 15px; margin-bottom: -5px;">
                 <input type="checkbox" name="rememberMe" id="rememberMe" style="width: 15px; height: 15px; background-color: floralwhite;">
-                <label for="rememberMe" style="padding-left: 3px;">Запомнить меня</label>
-                <a id="reg" href="/registration">Регистрация</a>
+                <label for="rememberMe" style="padding-left: 3px;" th:text="#{remember_my}">Запомнить меня</label>
+                <a id="reg" href="/registration" th:text="#{registr}">Регистрация</a>
             </div>
         </form>
     </div>
