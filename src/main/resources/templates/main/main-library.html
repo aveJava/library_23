@@ -18,7 +18,7 @@
                     <div class="container-fluid genreContainer">
                         <!-- Шапка -->
                         <a class="row myTab genreButton" th:href="@{/main_page/search (type='all')}" th:style="${genreId} != -1 ? '' : 'background-color: #f3f3f3;'">
-                            Все жанры
+                            <th:block th:text="#{all_genres}">Все жанры</th:block>
                         </a>
                         <!-- Список жанров -->
                         <th:block th:each="genre : ${allGenres}">

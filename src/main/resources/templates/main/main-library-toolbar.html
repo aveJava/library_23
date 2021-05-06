@@ -15,7 +15,7 @@
                 <!-- Номер текущей страницы -->
                 <div class="col-1 ofBlock">
                     <th:block th:text="${thisPage}"></th:block>
-                    of
+                    [[#{of}]]
                     <th:block th:text="${maxPage}"></th:block>
                 </div>
 
@@ -27,7 +27,6 @@
                                 <input type="submit" class="btn btn-secondary btnBar" name="title" value="<<"/>
                                 <input type="submit" class="btn btn-secondary btnBar" name="title" value="<"/>
                                 <div class="btn btn-secondary btnBar" th:text="${thisPage}"></div>
-<!--                                <input type="submit" class="btn btn-secondary btnBar" name="title" value="1"/>-->
                                 <input type="submit" class="btn btn-secondary btnBar" name="title" value=">"/>
                                 <input type="submit" class="btn btn-secondary btnBar" name="title" value=">>"/>
                             </form>
