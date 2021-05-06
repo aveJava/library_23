@@ -41,11 +41,11 @@ public class RegController {
             // проверка имени на ошибки
             if (user.getUsername() == null || user.getUsername().isEmpty()) {
                 hasError = true;
-                errorMsg = "Введите имя пользователя";
+                errorMsg = "enter_username";
             } else
             if (userService.isPresentEnableUsersWithUsername(user.getUsername())){
                 hasError = true;
-                errorMsg = "Это имя уже используется";
+                errorMsg = "name_is_taken";
             }
 
             // если имя подходит, переходить к выбору пароля
@@ -65,20 +65,20 @@ public class RegController {
             // проверка пароля на ошибки
             if (password == null  || password.isEmpty()) {
                 hasError = true;
-                errorMsg = "Введите пароль";
+                errorMsg = "enter_password";
             } else
             if (isInvalidPassword) {
                 hasError = true;
-                errorMsg = "Пароль должен содержать от 8 до 20 символов (цифры и латинские буквы), включая как минимум одну строчную букву, одну заглавную букву и одну цифру";
+                errorMsg = "bad_password";
             } else
             if (passConfirm == null || passConfirm.isEmpty()) {
                 hasError = true;
-                errorMsg = "Заполните поле подтверждения пароля";
+                errorMsg = "repeat_password";
                 model.addAttribute("displayPasswordValue", true);
             } else
             if (!password.equals(passConfirm)) {
                 hasError = true;
-                errorMsg = "Пароли не совпадают, попробуйте еще раз";
+                errorMsg = "pass_dont_match";
             }
 
             // если пароль подходит, сохранить нового пользователя в БД
@@ -97,7 +97,7 @@ public class RegController {
         // если была обнаружена ошибка, перенаправить снова на форму регистрации и отобразить сообщение об ошибке
         if (hasError) {
             model.addAttribute("user", user);
-            model.addAttribute("hasErrors", true);
+            model.addAttribute("hasErrors", true);  // можно убрать
             model.addAttribute("errorMsg", errorMsg);
 
             return "login/registration";

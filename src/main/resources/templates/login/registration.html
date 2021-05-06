@@ -12,18 +12,23 @@
         <form method="post" action="/registration" name='form-login' th:object="${user}" style="margin-top: 35vh;">
 
             <!-- сообщение об ошибке (если есть) -->
-            <div th:if="${hasErrors}">
-                <p th:text="${errorMsg}"></p>
+            <div th:if="${errorMsg} != null" style="margin-top: -5%;">
+                <p th:if="${errorMsg.equals('enter_username')}" th:text="#{enter_username}"></p>
+                <p th:if="${errorMsg.equals('name_is_taken')}" th:text="#{name_is_taken}"></p>
+                <p th:if="${errorMsg.equals('enter_password')}" th:text="#{enter_password}"></p>
+                <p th:if="${errorMsg.equals('bad_password')}" th:text="#{bad_password}"></p>
+                <p th:if="${errorMsg.equals('repeat_password')}" th:text="#{repeat_password}"></p>
+                <p th:if="${errorMsg.equals('pass_dont_match')}" th:text="#{pass_dont_match}"></p>
             </div>
 
             <!-- стадия выбора имени -->
             <div th:if="${user.getFormStage()} == 'username'">
                 <span class="fontawesome-user"></span>
                 <input type="text" th:field="*{username}" id="user"
-                       placeholder="Имя" readonly onfocus="this.removeAttribute('readonly')">
+                       th:placeholder="#{name}" readonly onfocus="this.removeAttribute('readonly')">
 
                 <input type="hidden" name="formStage" value="username">
-                <input type="submit" value="Выбрать имя">
+                <input type="submit" th:value="#{nameBtn}">
             </div>
 
             <!-- стадия выбора пароля -->
@@ -31,16 +36,16 @@
                 <span class="fontawesome-lock"></span>
                 <input type="password" id="pass" name="password"
                        th:value="${displayPasswordValue} ? ${user.getPassword()} : ''"
-                       placeholder="Пароль" readonly onfocus="this.removeAttribute('readonly')">
+                       th:placeholder="#{password}" readonly onfocus="this.removeAttribute('readonly')">
                        <!-- атрибуты readonly и onfocus добавляются, чтобы браузер не пытался сделать автозаполнение -->
 
                 <span class="fontawesome-lock"></span>
                 <input type="password" name="passwordConfirm" id="confirmPass"
-                       placeholder="Повторите пароль" readonly onfocus="this.removeAttribute('readonly')">
+                       th:placeholder="#{repeat_password}" readonly onfocus="this.removeAttribute('readonly')">
 
                 <input type="hidden" th:field="*{username}">
                 <input type="hidden" name="formStage" value="password">
-                <input type="submit" value="Установить пароль">
+                <input type="submit" th:value="#{set_password}">
             </div>
 
         </form>
