@@ -21,7 +21,7 @@ public class VoteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private long value;
+    private byte value;
 
     private long book_id;
 
