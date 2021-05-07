@@ -4,12 +4,14 @@ import library.dao.GenreEntityDao;
 import library.domain.GenreEntity;
 import library.repository.GenreEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class GenreEntityService implements GenreEntityDao {
@@ -38,7 +40,11 @@ public class GenreEntityService implements GenreEntityDao {
 
     @Override
     public List<GenreEntity> search(String... searchString) {
-        return genreRepo.findByNameContainingIgnoreCaseOrderByName(searchString[0]);
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("en".equals(locale.toString()))
+            return genreRepo.findByEnNameContainingIgnoreCaseOrderByEnName(searchString[0]);
+        else
+            return genreRepo.findByRuNameContainingIgnoreCaseOrderByRuName(searchString[0]);
     }
 
     @Override
@@ -55,8 +61,13 @@ public class GenreEntityService implements GenreEntityDao {
 
     @Override
     public Page<GenreEntity> search(int pageNumber, int pageSize, String sortField, Sort.Direction sortDirection, String... searchString) {
+        Locale locale = LocaleContextHolder.getLocale();
         Sort sort = Sort.by(sortDirection, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return genreRepo.findByNameContainingIgnoreCaseOrderByName(searchString[0], pageRequest);
+
+        if ("en".equals(locale.toString()))
+            return genreRepo.findByEnNameContainingIgnoreCaseOrderByEnName(searchString[0], pageRequest);
+        else
+            return genreRepo.findByRuNameContainingIgnoreCaseOrderByRuName(searchString[0], pageRequest);
     }
 }

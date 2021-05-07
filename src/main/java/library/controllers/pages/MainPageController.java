@@ -143,7 +143,7 @@ public class MainPageController {
         else message = found + getCorrectDeclension(totalElements);
         switch (searchType) {
             case SEARCH_GENRE:
-                message += String.format(" (%s: '%s')", genre, genreService.get(genreId).getName());
+                message += String.format(" (%s: '%s')", genre, genreService.get(genreId).getLocalizedName());
                 break;
             case SEARCH_KEYWORDS:
                 // сборка массива ключевых слов в одну строку

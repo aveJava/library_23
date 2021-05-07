@@ -69,7 +69,7 @@ public class BookModel {
         content = entity.getContent();
         pageCount = entity.getPageCount();
         isbn = entity.getIsbn();
-        genre = entity.getGenre().getName();
+        genre = entity.getGenre().getLocalizedName();
         author = entity.getAuthor().getFio();
         publisher = entity.getPublisher().getName();
         publishYear = entity.getPublishYear();

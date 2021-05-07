@@ -6,9 +6,11 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Table(name = "genre")
@@ -23,14 +25,23 @@ public class GenreEntity {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "ru_name", nullable = false)
+    private String ruName;
+
+    @Column(name = "en_name", nullable = false)
+    private String enName;
 
     @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
     private List<BookEntity> books;
 
     @Override
     public String toString() {
-        return name;
+        return ruName;
+    }
+
+    public String getLocalizedName() {
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("ru".equals(locale.toString())) return ruName;
+        else return enName;
     }
 }

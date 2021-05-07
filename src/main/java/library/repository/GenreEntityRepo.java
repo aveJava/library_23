@@ -12,9 +12,11 @@ import java.util.List;
 public interface GenreEntityRepo extends JpaRepository<GenreEntity, Long> {
 
     // поиск жанров по имени
-    List<GenreEntity> findByNameContainingIgnoreCaseOrderByName(String name);
+    List<GenreEntity> findByRuNameContainingIgnoreCaseOrderByRuName(String ruName);
+    List<GenreEntity> findByEnNameContainingIgnoreCaseOrderByEnName(String enName);
 
     // поиск жанров по имени с постраничностью
-    Page<GenreEntity> findByNameContainingIgnoreCaseOrderByName(String name, Pageable pageable);
+    Page<GenreEntity> findByRuNameContainingIgnoreCaseOrderByRuName(String name, Pageable pageable);
+    Page<GenreEntity> findByEnNameContainingIgnoreCaseOrderByEnName(String name, Pageable pageable);
 
 }

@@ -120,10 +120,10 @@
                                                 <label for="genre" class="form-label editFieldLabel" th:text="#{genre}">Жанр</label>
                                                 <select class="form-select editFieldInput" id="genre" name="genre" aria-describedby="validationServer04Feedback" required>
                                                     <option selected style="display: none;">
-                                                        <th:block th:text="${EditableBook.getGenre}"></th:block>
+                                                        <th:block th:text="${EditableBook.getGenre()}"></th:block>
                                                     </option>
                                                     <th:block th:each="genre : ${allGenres}">
-                                                        <option><th:block th:text="${genre}"></th:block></option>
+                                                        <option><th:block th:text="${genre.getLocalizedName()}"></th:block></option>
                                                     </th:block>
                                                 </select>
                                             </div>
