@@ -6,10 +6,12 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 @Entity
@@ -24,7 +26,11 @@ public class AuthorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fio;
+    @Column(name = "ru_fio", nullable = false)
+    private String ruFio;
+
+    @Column(name = "en_fio", nullable = false)
+    private String enFio;
 
     private Date birthday;
 
@@ -33,6 +39,12 @@ public class AuthorEntity {
 
     @Override
     public String toString() {
-        return fio;
+        return getLocalizedFio();
+    }
+
+    public String getLocalizedFio() {
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("ru".equals(locale.toString())) return ruFio;
+        else return enFio;
     }
 }

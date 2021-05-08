@@ -4,12 +4,14 @@ import library.dao.AuthorEntityDao;
 import library.domain.AuthorEntity;
 import library.repository.AuthorEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AuthorEntityService implements AuthorEntityDao {
@@ -38,7 +40,11 @@ public class AuthorEntityService implements AuthorEntityDao {
 
     @Override
     public List<AuthorEntity> search(String ... searchString) {
-        return authorRepo.findByFioContainingIgnoreCaseOrderByFio(searchString[0]);
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("en".equals(locale.toString()))
+            return authorRepo.findByEnFioContainingIgnoreCaseOrderByEnFio(searchString[0]);
+        else
+            return authorRepo.findByRuFioContainingIgnoreCaseOrderByRuFio(searchString[0]);
     }
 
     @Override
@@ -55,8 +61,13 @@ public class AuthorEntityService implements AuthorEntityDao {
 
     @Override
     public Page<AuthorEntity> search(int pageNumber, int pageSize, String sortField, Sort.Direction sortDirection, String... searchString) {
+        Locale locale = LocaleContextHolder.getLocale();
         Sort sort = Sort.by(sortDirection, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return authorRepo.findByFioContainingIgnoreCaseOrderByFio(searchString[0], pageRequest);
+
+        if ("en".equals(locale.toString()))
+            return authorRepo.findByEnFioContainingIgnoreCaseOrderByEnFio(searchString[0], pageRequest);
+        else
+            return authorRepo.findByRuFioContainingIgnoreCaseOrderByRuFio(searchString[0], pageRequest);
     }
 }

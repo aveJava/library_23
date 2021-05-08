@@ -15,9 +15,14 @@ import java.util.List;
 @Repository
 public interface BookEntityRepo extends JpaRepository<BookEntity, Long> {
 
-    // лист книг, для который найдено включение name в имени книги, или authorFio в имени автора книги
-    // AuthorFioContaining... - поиск совпадения в поле fio объекта, находящегося в поле author кники
-    List<BookEntity> findByNameContainingIgnoreCaseOrAuthorFioContainingIgnoreCaseOrderByName(String name, String fio);
+    // поиск книг по имени книги и/или фио автора
+    // AuthorFioContaining... - поиск совпадения в поле fio объекта, находящегося в поле author книги
+    List<BookEntity> findByNameContainingIgnoreCaseOrAuthorRuFioContainingIgnoreCaseOrderByName(String name, String fio);
+    List<BookEntity> findByNameContainingIgnoreCaseOrAuthorEnFioContainingIgnoreCaseOrderByName(String name, String fio);
+
+    // поиск книг по имени книги и/или фио автора с постраничностью
+    Page<BookEntity> findByNameContainingIgnoreCaseOrAuthorRuFioContainingIgnoreCaseOrderByName(String name, String fio, Pageable pageable);
+    Page<BookEntity> findByNameContainingIgnoreCaseOrAuthorEnFioContainingIgnoreCaseOrderByName(String name, String fio, Pageable pageable);
 
     // создает страницу (Page) книг (BookEntity) для которых заполнены все поля, кроме content
     @Query("select new BookEntity(b.id, b.name, b.pageCount, b.isbn, b.genre, b.author, b.publisher, b.publishYear, " +
@@ -50,9 +55,6 @@ public interface BookEntityRepo extends JpaRepository<BookEntity, Long> {
             "b.image, b.avgRating, b.totalVoteCount, b.totalRating, b.viewCount, b.description) from BookEntity b " +
             "WHERE b.genre.id = :genreId")
     Page<BookEntity> findByGenre(@Param("genreId") long genreId, Pageable pageable);
-
-    // поиск книг по имени книги и/или фио автора с постраничностью
-    Page<BookEntity> findByNameContainingIgnoreCaseOrAuthorFioContainingIgnoreCaseOrderByName(String name, String fio, Pageable pageable);
 
     // получение контента по id
     @Query("SELECT b.content FROM BookEntity b WHERE b.id=:id")

@@ -70,7 +70,7 @@ public class BookModel {
         pageCount = entity.getPageCount();
         isbn = entity.getIsbn();
         genre = entity.getGenre().getLocalizedName();
-        author = entity.getAuthor().getFio();
+        author = entity.getAuthor().getLocalizedFio();
         publisher = entity.getPublisher().getName();
         publishYear = entity.getPublishYear();
         image = entity.getImage();

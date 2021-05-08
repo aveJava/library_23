@@ -4,12 +4,14 @@ import library.dao.BookEntityDao;
 import library.domain.BookEntity;
 import library.repository.BookEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class BookEntityService implements BookEntityDao {
@@ -39,7 +41,12 @@ public class BookEntityService implements BookEntityDao {
     @Override
     public List<BookEntity> search(String ... searchString) {
         if (searchString.length == 1) searchString = new String[]{searchString[0], ""};
-        return bookRepo.findByNameContainingIgnoreCaseOrAuthorFioContainingIgnoreCaseOrderByName(searchString[0], searchString[1]);
+
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("en".equals(locale.toString()))
+            return bookRepo.findByNameContainingIgnoreCaseOrAuthorEnFioContainingIgnoreCaseOrderByName(searchString[0], searchString[1]);
+        else
+            return bookRepo.findByNameContainingIgnoreCaseOrAuthorRuFioContainingIgnoreCaseOrderByName(searchString[0], searchString[1]);
     }
 
     @Override
@@ -58,9 +65,14 @@ public class BookEntityService implements BookEntityDao {
     public Page<BookEntity> search(int pageNumber, int pageSize, String sortField, Sort.Direction sortDirection, String... searchString) {
         if (searchString.length == 1) searchString = new String[]{searchString[0], searchString[0]};
 
+        Locale locale = LocaleContextHolder.getLocale();
         Sort sort = Sort.by(sortDirection, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return bookRepo.findByNameContainingIgnoreCaseOrAuthorFioContainingIgnoreCaseOrderByName(searchString[0], searchString[1], pageRequest);
+
+        if ("en".equals(locale.toString()))
+            return bookRepo.findByNameContainingIgnoreCaseOrAuthorEnFioContainingIgnoreCaseOrderByName(searchString[0], searchString[1], pageRequest);
+        else
+            return bookRepo.findByNameContainingIgnoreCaseOrAuthorRuFioContainingIgnoreCaseOrderByName(searchString[0], searchString[1], pageRequest);
     }
 
     @Override
