@@ -71,7 +71,7 @@ public class BookModel {
         isbn = entity.getIsbn();
         genre = entity.getGenre().getLocalizedName();
         author = entity.getAuthor().getLocalizedFio();
-        publisher = entity.getPublisher().getName();
+        publisher = entity.getPublisher().getLocalizedName();
         publishYear = entity.getPublishYear();
         image = entity.getImage();
         avgRating = entity.getAvgRating();

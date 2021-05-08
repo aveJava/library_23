@@ -12,9 +12,11 @@ import java.util.List;
 public interface PublisherEntityRepo extends JpaRepository<PublisherEntity, Long> {
 
     // поиск издателей по имени
-    List<PublisherEntity> findByNameContainingIgnoreCaseOrderByName(String name);
+    List<PublisherEntity> findByRuNameContainingIgnoreCaseOrderByRuName(String name);
+    List<PublisherEntity> findByEnNameContainingIgnoreCaseOrderByEnName(String name);
 
     // поиск издателей по имени с постраничностью
-    Page<PublisherEntity> findByNameContainingIgnoreCaseOrderByName(String name, Pageable pageable);
+    Page<PublisherEntity> findByRuNameContainingIgnoreCaseOrderByRuName(String name, Pageable pageable);
+    Page<PublisherEntity> findByEnNameContainingIgnoreCaseOrderByEnName(String name, Pageable pageable);
 
 }

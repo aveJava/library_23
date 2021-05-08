@@ -4,12 +4,14 @@ import library.dao.PublisherEntityDao;
 import library.domain.PublisherEntity;
 import library.repository.PublisherEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class PublisherEntityService implements PublisherEntityDao {
@@ -38,7 +40,11 @@ public class PublisherEntityService implements PublisherEntityDao {
 
     @Override
     public List<PublisherEntity> search(String... searchString) {
-        return publisherRepo.findByNameContainingIgnoreCaseOrderByName(searchString[0]);
+        Locale locale = LocaleContextHolder.getLocale();
+        if ("en".equals(locale.toString()))
+            return publisherRepo.findByEnNameContainingIgnoreCaseOrderByEnName(searchString[0]);
+        else
+            return publisherRepo.findByRuNameContainingIgnoreCaseOrderByRuName(searchString[0]);
     }
 
     @Override
@@ -55,8 +61,13 @@ public class PublisherEntityService implements PublisherEntityDao {
 
     @Override
     public Page<PublisherEntity> search(int pageNumber, int pageSize, String sortField, Sort.Direction sortDirection, String... searchString) {
+        Locale locale = LocaleContextHolder.getLocale();
         Sort sort = Sort.by(sortDirection, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return publisherRepo.findByNameContainingIgnoreCaseOrderByName(searchString[0], pageRequest);
+
+        if ("en".equals(locale.toString()))
+            return publisherRepo.findByEnNameContainingIgnoreCaseOrderByEnName(searchString[0], pageRequest);
+        else
+            return publisherRepo.findByRuNameContainingIgnoreCaseOrderByRuName(searchString[0], pageRequest);
     }
 }
