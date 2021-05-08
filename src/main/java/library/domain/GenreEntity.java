@@ -36,7 +36,7 @@ public class GenreEntity {
 
     @Override
     public String toString() {
-        return ruName;
+        return getLocalizedName();
     }
 
     public String getLocalizedName() {
