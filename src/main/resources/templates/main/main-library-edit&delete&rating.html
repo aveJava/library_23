@@ -178,7 +178,7 @@
                                         <!-- Description -->
                                         <div class="row">
                                             <label for="description" form="EditBookForm" class="form-label editFieldLabel" style="margin-top: 3%;" th:text="#{descr}">Описание</label>
-                                            <textarea type="text" form="EditBookForm" class="form-control editFieldInput" id="description" name="description" th:value="${EditableBook.getDescription()}" style="height: 5vw; resize: none;"></textarea>
+                                            <textarea type="text" form="EditBookForm" class="form-control editFieldInput" id="description" name="description" style="height: 5vw; resize: none;">[[${EditableBook.getDescription()}]]</textarea>
                                         </div>
                                     </div>
                                 </div>
