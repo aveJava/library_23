@@ -2,6 +2,7 @@ package library.model;
 
 import library.domain.BookEntity;
 import library.service.AuthorEntityService;
+import library.service.BookEntityService;
 import library.service.GenreEntityService;
 import library.service.PublisherEntityService;
 import lombok.EqualsAndHashCode;
@@ -75,7 +76,7 @@ public class BookModel {
         }
     }
 
-    public BookEntity toBookEntity(AuthorEntityService authorService, GenreEntityService genreService, PublisherEntityService publisherService) {
+    public BookEntity toBookEntity(AuthorEntityService authorService, BookEntityService bookService, GenreEntityService genreService, PublisherEntityService publisherService) {
         BookEntity entity = new BookEntity();
 
         entity.setId(id);
@@ -96,11 +97,14 @@ public class BookModel {
             try {
                 entity.setImage(uploadedImage.getBytes());
             } catch (IOException e) {e.printStackTrace();}
+        else entity.setImage(image);
 
         if (uploadedContent != null && uploadedContent.getSize() > 199)
             try {
                 entity.setContent(uploadedContent.getBytes());
             } catch (IOException e) {e.printStackTrace();}
+        else if (entity.getId() != null)
+            entity.setContent(bookService.getContent(entity.getId()));
 
         return entity;
     }

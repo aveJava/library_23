@@ -1,9 +1,6 @@
 package library.domain;
 
 import library.model.BookModel;
-import library.service.AuthorEntityService;
-import library.service.GenreEntityService;
-import library.service.PublisherEntityService;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

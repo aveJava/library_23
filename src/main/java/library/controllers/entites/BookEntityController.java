@@ -58,7 +58,7 @@ public class BookEntityController {
 
         boolean isValid = validateAndPrepareRedirectAttributesIfInvalid(model, redirectAttr);
         if (isValid) {
-            BookEntity entity = model.toBookEntity(authorService, genreService, publisherService);
+            BookEntity entity = model.toBookEntity(authorService, bookService, genreService, publisherService);
             bookService.save(entity);
         } else {
             redirectAttr.addFlashAttribute("actionMethod", "POST");     // метод, которым отправлять форму после редактирования
@@ -89,7 +89,7 @@ public class BookEntityController {
 
         boolean isValid = validateAndPrepareRedirectAttributesIfInvalid(model, redirectAttr);
         if (isValid) {
-            BookEntity entity = model.toBookEntity(authorService, genreService, publisherService);
+            BookEntity entity = model.toBookEntity(authorService, bookService, genreService, publisherService);
             bookService.save(entity);
         } else {
             redirectAttr.addFlashAttribute("actionMethod", "PATCH");                     // метод, которым отправлять форму после редактирования
