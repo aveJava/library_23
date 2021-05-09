@@ -29,7 +29,7 @@ public class BookModel {
     @NotNull(message = "Введите количество страниц")
     @Min(value = 1, message = "В книге должна быть хотя бы одна страница!")
     @Max(value = 5000, message = "Слишком много страниц для одной книги!")
-    private int pageCount;
+    private Integer pageCount;
 
     private String isbn;
 
