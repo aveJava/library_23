@@ -85,7 +85,9 @@ public class BookModel {
         entity.setGenre(genreService.search(genre).get(0));
         entity.setAuthor(authorService.search(author).get(0));
         entity.setPublisher(publisherService.search(publisher).get(0));
+        entity.setPublishYear(publishYear);
         entity.setAvgRating(avgRating);
+        entity.setTotalVoteCount(totalVoteCount);
         entity.setTotalRating(totalRating);
         entity.setViewCount(viewCount);
         entity.setDescription(description);
