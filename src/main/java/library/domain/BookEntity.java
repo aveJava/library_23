@@ -51,22 +51,25 @@ public class BookEntity {
         this.description = description;
     }
 
-    public BookEntity(BookModel model, GenreEntityService genreService, AuthorEntityService authorService, PublisherEntityService publisherService) {
-        if (model.getId() != null) id = model.getId();
-        name = model.getName();
-        content = model.getContent();
-        pageCount = model.getPageCount();
-        isbn = model.getIsbn();
-        genre = genreService.search(model.getGenre()).get(0);
-        author = authorService.search(model.getAuthor()).get(0);
-        publisher = publisherService.search(model.getPublisher()).get(0);
-        publishYear = model.getPublishYear();
-        image = model.getImage();
-        avgRating = model.getAvgRating();
-        totalVoteCount = model.getTotalVoteCount();
-        totalRating = model.getTotalRating();
-        viewCount = model.getViewCount();
-        description = model.getDescription();
+    public BookModel toBookModel() {
+        BookModel model = new BookModel();
+
+        model.setId(id);
+        model.setName(name);
+        model.setPageCount(pageCount);
+        model.setIsbn(isbn);
+        model.setGenre(genre.getLocalizedName());
+        model.setAuthor(author.getLocalizedFio());
+        model.setPublisher(publisher.getLocalizedName());
+        model.setPublishYear(publishYear);
+        model.setImage(image);
+        model.setAvgRating(avgRating);
+        model.setTotalVoteCount(totalVoteCount);
+        model.setTotalRating(totalRating);
+        model.setViewCount(viewCount);
+        model.setDescription(description);
+
+        return model;
     }
 
     @Id

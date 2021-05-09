@@ -68,7 +68,7 @@ public class BookEntityController {
     // Отправляет форму на редактирование книги
     @GetMapping("/books/{id}/edit")
     public String getBookEditForm(@PathVariable("id") long id, RedirectAttributes redirectAttr) {
-        BookModel book = new BookModel(bookService.get(id));
+        BookModel book = bookService.get(id).toBookModel();
         redirectAttr.addFlashAttribute("EditableBook", book);
         redirectAttr.addFlashAttribute("ShowEditModelWindow", true);
         redirectAttr.addFlashAttribute("actionURL", "/books/" + book.getId());
@@ -198,7 +198,7 @@ public class BookEntityController {
         // если форма заполнена правильно - сохраняем объект, иначе перенаправляем пользователя снова на страницу редактированя
         if (errorMessages.isEmpty()) {
             // если форма была заполнена правильно, сохраняем данные в БД
-            BookEntity book = new BookEntity(model, genreService, authorService, publisherService);
+            BookEntity book = model.toBookEntity(authorService, genreService, publisherService);
             bookService.save(book);
         } else {
             // передаем контроллеру, вызываемому по redirect, список ошибок и прочие данные, необходимые для повторного редактирования объекта

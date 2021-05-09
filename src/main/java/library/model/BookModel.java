@@ -1,6 +1,9 @@
 package library.model;
 
 import library.domain.BookEntity;
+import library.service.AuthorEntityService;
+import library.service.GenreEntityService;
+import library.service.PublisherEntityService;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +13,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 @EqualsAndHashCode(of = "id")
@@ -60,25 +66,41 @@ public class BookModel {
     private String description;
 
     public BookModel() {
-
+        // присвоение стартовой обложки (no-cover.jpg)
+        String path = "src/main/resources/static/images/no-cover.jpg";
+        try {
+            this.image = Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public BookModel(BookEntity entity) {
-        id = entity.getId();
-        name = entity.getName();
-        content = entity.getContent();
-        pageCount = entity.getPageCount();
-        isbn = entity.getIsbn();
-        genre = entity.getGenre().getLocalizedName();
-        author = entity.getAuthor().getLocalizedFio();
-        publisher = entity.getPublisher().getLocalizedName();
-        publishYear = entity.getPublishYear();
-        image = entity.getImage();
-        avgRating = entity.getAvgRating();
-        totalVoteCount = entity.getTotalVoteCount();
-        totalRating = entity.getTotalRating();
-        viewCount = entity.getViewCount();
-        description = entity.getDescription();
+    public BookEntity toBookEntity(AuthorEntityService authorService, GenreEntityService genreService, PublisherEntityService publisherService) {
+        BookEntity entity = new BookEntity();
+
+        entity.setId(id);
+        entity.setName(name);
+        entity.setPageCount(pageCount);
+        entity.setIsbn(isbn);
+        entity.setGenre(genreService.search(genre).get(0));
+        entity.setAuthor(authorService.search(author).get(0));
+        entity.setPublisher(publisherService.search(publisher).get(0));
+        entity.setAvgRating(avgRating);
+        entity.setTotalRating(totalRating);
+        entity.setViewCount(viewCount);
+        entity.setDescription(description);
+
+        if (uploadedImage != null && uploadedImage.getSize() > 199)
+            try {
+                entity.setImage(uploadedImage.getBytes());
+            } catch (IOException e) {e.printStackTrace();}
+
+        if (uploadedContent != null && uploadedContent.getSize() > 199)
+            try {
+                entity.setContent(uploadedContent.getBytes());
+            } catch (IOException e) {e.printStackTrace();}
+
+        return entity;
     }
 
     @Override
