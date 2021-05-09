@@ -6,38 +6,36 @@ import library.service.AuthorEntityService;
 import library.service.BookEntityService;
 import library.service.GenreEntityService;
 import library.service.PublisherEntityService;
+import library.validation.BookModelValidator;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class BookEntityController {
     /** Инстансы используемых сервисов */
-    AuthorEntityService authorService;
-    BookEntityService bookService;
-    GenreEntityService genreService;
-    PublisherEntityService publisherService;
+    final AuthorEntityService authorService;
+    final BookEntityService bookService;
+    final GenreEntityService genreService;
+    final PublisherEntityService publisherService;
+
+    final BookModelValidator validator;
 
     public BookEntityController(AuthorEntityService authorService, BookEntityService bookService,
-                                GenreEntityService genreService, PublisherEntityService publisherService) {
+                                GenreEntityService genreService, PublisherEntityService publisherService,
+                                BookModelValidator validator) {
         this.authorService = authorService;
         this.bookService = bookService;
         this.genreService = genreService;
         this.publisherService = publisherService;
+        this.validator = validator;
     }
 
     // Отправляет форму на создание книги
@@ -55,12 +53,17 @@ public class BookEntityController {
 
     // Создает новую книгу
     @PostMapping(value = "/books", consumes = { "multipart/form-data" })
-    public String createBook(@ModelAttribute("EditableBook") @Valid BookModel model,
-                             BindingResult binding, RedirectAttributes redirectAttr) {
+    public String createBook(@ModelAttribute("EditableBook") BookModel model,
+                             RedirectAttributes redirectAttr) {
 
-        validateProcess(model, binding, redirectAttr);
-        redirectAttr.addFlashAttribute("actionMethod", "POST");     // метод, которым отправлять форму после редактирования
-        redirectAttr.addFlashAttribute("actionURL", "/books");      // адрес, на который отправлять
+        boolean isValid = validateAndPrepareRedirectAttributesIfInvalid(model, redirectAttr);
+        if (isValid) {
+            BookEntity entity = model.toBookEntity(authorService, genreService, publisherService);
+            bookService.save(entity);
+        } else {
+            redirectAttr.addFlashAttribute("actionMethod", "POST");     // метод, которым отправлять форму после редактирования
+            redirectAttr.addFlashAttribute("actionURL", "/books");      // адрес, на который отправлять форму
+        }
 
         return "redirect:/main_page";
     }
@@ -81,12 +84,17 @@ public class BookEntityController {
     // Обновляет книгу (принимает заполненную форму на редактирование)
     @PatchMapping(value = "/books/{id}", consumes = { "multipart/form-data" })
     public String bookEdit(@PathVariable("id") long id,
-                           @ModelAttribute("EditableBook") @Valid BookModel model,
-                           BindingResult binding, RedirectAttributes redirectAttr) {
+                           @ModelAttribute("EditableBook") BookModel model,
+                           RedirectAttributes redirectAttr) {
 
-        validateProcess(model, binding, redirectAttr);
-        redirectAttr.addFlashAttribute("actionMethod", "PATCH");                     // метод, которым отправлять форму после редактирования
-        redirectAttr.addFlashAttribute("actionURL", "/books/" + model.getId());      // адрес, на который отправлять
+        boolean isValid = validateAndPrepareRedirectAttributesIfInvalid(model, redirectAttr);
+        if (isValid) {
+            BookEntity entity = model.toBookEntity(authorService, genreService, publisherService);
+            bookService.save(entity);
+        } else {
+            redirectAttr.addFlashAttribute("actionMethod", "PATCH");                     // метод, которым отправлять форму после редактирования
+            redirectAttr.addFlashAttribute("actionURL", "/books/" + model.getId());      // адрес, на который отправлять форму
+        }
 
         return "redirect:/main_page";
     }
@@ -103,7 +111,7 @@ public class BookEntityController {
 
     // Предоставляет обложку книги по ее id
     @GetMapping("/books/img")
-    public void getImage(HttpServletResponse response, @RequestParam("id") int id, Model model) throws IOException {
+    public void getImage(HttpServletResponse response, @RequestParam("id") int id) throws IOException {
         BookEntity book = bookService.get(id);
 
         byte[] imageBytes = book.getImage();
@@ -133,74 +141,24 @@ public class BookEntityController {
 
     /** Вспомогательные методы контроллера */
 
-    // проверяет корректность заполненных данных, если все правильно - сохраняет объект,
-    //      если нет - подготавливает RedirectAttributes для перенаправления на повторное редактирование формы
-    public void validateProcess(BookModel model, BindingResult binding, RedirectAttributes redirectAttr) {
-
-        // если были загружены обложка или контент, сохраняем их в поля image и content
-        MultipartFile uploadedImg = model.getUploadedImage();
-        MultipartFile uploadedCont = model.getUploadedContent();
-        try {
-            if (uploadedImg != null && uploadedImg.getSize() > 199) model.setImage(uploadedImg.getBytes());
-                // если это новая книга, и обложка не была загружена, сохраняем дефолтную обложку (no-cover)
-            else if (model.getId() == null) {
-                String path = "src/main/resources/static/images/no-cover.jpg";
-                model.setImage(Files.readAllBytes(Paths.get(path)));
-            }
-            if (uploadedCont != null && uploadedCont.getSize() > 199) model.setContent(uploadedCont.getBytes());
-        } catch (IOException e) { e.printStackTrace(); }
+    // валидирует заполненную форму создания или редактирования книги
+    // если данные не валидны, подготавливает RedirectAttributes для перенаправления на повторное заполнение формы
+    // возвращает true, если форма была заполнена правильно, false - если неправильно.
+    public boolean validateAndPrepareRedirectAttributesIfInvalid(BookModel model, RedirectAttributes redirectAttr) {
+        final DataBinder dataBinder = new DataBinder(model);
+        dataBinder.addValidators(validator);
+        dataBinder.validate();
+        BindingResult result = dataBinder.getBindingResult();
 
         // создаем список сообщений об ошибках, отправляемый пользователю
         List<String> errorMessages = new ArrayList<>();
-        if (binding.hasErrors()) {
-            for (ObjectError error : binding.getAllErrors()) {
+        if (result.hasErrors()) {
+            for (ObjectError error : result.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
             }
         }
 
-        // редактирование получившегося списка
-        for (int i=0; i<errorMessages.size(); i++) {
-            // на случай, если пользователь оставит поля publishYear или pageCount пустыми (проблема конвертации)
-            if (errorMessages.get(i).contains("Failed to convert property value of type 'java.lang.String' to required type 'int' for property 'pageCount';")) {
-                errorMessages.remove(i);
-                errorMessages.add(i, "Введите количество страниц");
-            }
-            if (errorMessages.get(i).contains("Failed to convert property value of type 'java.lang.String' to required type 'int' for property 'publishYear';")) {
-                errorMessages.remove(i);
-                errorMessages.add(i, "Укажите год издания");
-            }
-        }
-
-        // проверка наличия обложки
-        if (model.getImage() == null || model.getImage().length < 200) errorMessages.add("Загрузите обложку книги (jpg, png или gif не менее 200 байт)");
-
-        // проверка ISBN
-        String isbn = model.getIsbn();
-        if (isbn == null || isbn.isEmpty()) errorMessages.add("Заполните ISBN");
-        else {
-            String isbnTrim = isbn.replaceAll("-", "");
-            if (isbnTrim.replaceAll("\\d", "").length() != 0) errorMessages.add("ISBN не должен включать ничего кроме цифр и дефисов!");
-            else if ((isbnTrim.length() - isbn.length()) > 4) errorMessages.add("Слишком много дефисов в ISBN");
-            else if (isbnTrim.length() < 10 || isbnTrim.length() > 13)
-                errorMessages.add("ISBN должен включать от 10 до 13 цифр (допускается использовать дефисы между ними)");
-            else {
-                for (String isb : bookService.getAllISBN(model.getId())) {
-                    if (isb.replaceAll("-", "").equals(isbnTrim)) errorMessages.add("Книга с таким ISBN уже есть в базе");
-                }
-            }
-        }
-
-        // проверка года
-        int year = LocalDate.now().getYear();
-        Integer publishYear = model.getPublishYear();
-        if (model.getPublishYear() != null && (publishYear < 400 || publishYear > year)) errorMessages.add("Проверьте год издания");
-
-        // если форма заполнена правильно - сохраняем объект, иначе перенаправляем пользователя снова на страницу редактированя
-        if (errorMessages.isEmpty()) {
-            // если форма была заполнена правильно, сохраняем данные в БД
-            BookEntity book = model.toBookEntity(authorService, genreService, publisherService);
-            bookService.save(book);
-        } else {
+        if (result.hasErrors()) {
             // передаем контроллеру, вызываемому по redirect, список ошибок и прочие данные, необходимые для повторного редактирования объекта
             redirectAttr.addFlashAttribute("errors", errorMessages);                        // список сообщений об ошибках
             redirectAttr.addFlashAttribute("EditableBook", model);                          // редактуруемый объект
@@ -208,5 +166,7 @@ public class BookEntityController {
             redirectAttr.addFlashAttribute("allAuthors", authorService.getAll());           // список авторов
             redirectAttr.addFlashAttribute("allPublishers", publisherService.getAll());     // список издательств
         }
+
+        return !result.hasErrors();
     }
 }
