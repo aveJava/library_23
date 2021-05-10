@@ -83,6 +83,7 @@ public class MainPageController {
         model.addAttribute("SearchMessage", getSearchMessage());
         model.addAttribute("genreId", searchType == SearchType.SEARCH_GENRE ? genreId : -1);
         model.addAttribute("userController", userController);
+        model.addAttribute("toolbarControllerAddress", "/main_page/toolbar");
 
         return "pages/main";
     }

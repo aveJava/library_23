@@ -15,7 +15,7 @@
 
             <!-- Номера страниц -->
             <div class="btn-group me-2" role="group" aria-label="Second group">
-                <form class="myToolbar" action="/main_page/toolbar/NumberButtons" method="get">
+                <form class="myToolbar" th:action="${toolbarControllerAddress} + '/NumberButtons'" method="get">
                     <input type="submit" class="btn btnBarPage btn-secondary btnBar" name="title" value="<<" style="border-radius: 0.35vw 0 0 0.35vw;"/>
                     <input type="submit" class="btn btnBarPage btn-secondary btnBar" name="title" value="<" style="border-radius: 0;"/>
                     <div class="btn  btnBarPage btn-secondary btnBar" th:text="${thisPage}" style="border-radius: 0;"></div>
@@ -30,10 +30,10 @@
                     <th:block th:text="${pageSize}"></th:block>
                 </button>
                 <ul class="dropdown-menu" style="max-width: 30px">
-                    <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=5">5</a></li>
-                    <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=10">10</a></li>
-                    <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=15">15</a></li>
-                    <li><a class="dropdown-item" href="/main_page/toolbar/PageSize?size=20">20</a></li>
+                    <li><a class="dropdown-item" th:href="${toolbarControllerAddress} + '/PageSize?size=5'">5</a></li>
+                    <li><a class="dropdown-item" th:href="${toolbarControllerAddress} + '/PageSize?size=10'">10</a></li>
+                    <li><a class="dropdown-item" th:href="${toolbarControllerAddress} + '/PageSize?size=15'">15</a></li>
+                    <li><a class="dropdown-item" th:href="${toolbarControllerAddress} + '/PageSize?size=20'">20</a></li>
                 </ul>
             </div>
         </div>
