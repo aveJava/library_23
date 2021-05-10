@@ -175,35 +175,46 @@ h1 { font-size: 1.5em; margin: 0.5vw; }
 /* Toolbar */
 
 .toolbarContainer {
-    margin: 0.5% 0;
+    margin: 1%;
+    display: flex;
+    justify-content: center;
 }
 
 .myToolbar {
     display: contents;
 }
 
-.ofBlock {
+.btnBar {
+    height: 2vw;
+    width: 2vw;
+    padding: 0;
     display: flex;
-    margin: auto;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9vw;
 }
 
-.btnBar {
-    height: 40px;
-    width: 40px;
-    margin: -3px;
+.btnBarPage {
     border-color: dimgray;
     color: white;
     background-color: dimgray;
 }
 
 .btnDropdown {
-    height: 40px;
-    width: 60px;
+    width: 3vw;
+    border-radius: 0.35vw;
 }
 
 /* Подгоняет ширину выпадающего списка */
 .dropdown-menu {
-    min-width: 3.8rem;
+    /*min-width: 3.8rem;*/
+    font-size: 0.9vw;
+    min-width: 3vw;
+    padding: 0.2vw 1.0vw;
+}
+
+.dropdown-item {
+    padding: 0;
 }
 
 
