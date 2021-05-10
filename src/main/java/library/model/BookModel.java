@@ -10,9 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,31 +23,24 @@ public class BookModel {
 
     private Long id;
 
-    @NotEmpty(message = "Не должно быть безымянных книг")
     private String name;
 
     private byte[] content;
 
     private MultipartFile uploadedContent;
 
-    @NotNull(message = "Введите количество страниц")
-    @Min(value = 1, message = "В книге должна быть хотя бы одна страница!")
-    @Max(value = 5000, message = "Слишком много страниц для одной книги!")
-    private Integer pageCount;
+    private String pageCount;
 
     private String isbn;
 
-    @NotEmpty(message = "Выберите жанр")
     private String genre;
 
-    @NotEmpty(message = "Выберите автора")
     private String author;
 
-    @NotEmpty(message = "Укажите издателя")
     private String publisher;
 
     @NotNull(message = "Укажите год издания")
-    private Integer publishYear;
+    private String publishYear;
 
     private byte[] image;
 
@@ -81,12 +71,12 @@ public class BookModel {
 
         entity.setId(id);
         entity.setName(name);
-        entity.setPageCount(pageCount);
+        entity.setPageCount(Integer.parseInt(pageCount));
         entity.setIsbn(isbn);
         entity.setGenre(genreService.search(genre).get(0));
         entity.setAuthor(authorService.search(author).get(0));
         entity.setPublisher(publisherService.search(publisher).get(0));
-        entity.setPublishYear(publishYear);
+        entity.setPublishYear(Integer.parseInt(publishYear));
         entity.setAvgRating(avgRating);
         entity.setTotalVoteCount(totalVoteCount);
         entity.setTotalRating(totalRating);

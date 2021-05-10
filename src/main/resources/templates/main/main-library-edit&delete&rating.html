@@ -106,7 +106,7 @@
                                             <!-- Author -->
                                             <div class="row">
                                                 <label for="author" class="form-label editFieldLabel" th:text="#{author}">Автор</label>
-                                                <select class="form-select editFieldInput" id="author" name="author" aria-describedby="validationServer04Feedback" required>
+                                                <select class="form-select editFieldInput" id="author" name="author" aria-describedby="validationServer04Feedback">
                                                     <option selected style="display: none;">
                                                         <th:block th:text="${EditableBook.getAuthor}"></th:block>
                                                     </option>
@@ -118,7 +118,7 @@
                                             <!-- Genre -->
                                             <div class="row">
                                                 <label for="genre" class="form-label editFieldLabel" th:text="#{genre}">Жанр</label>
-                                                <select class="form-select editFieldInput" id="genre" name="genre" aria-describedby="validationServer04Feedback" required>
+                                                <select class="form-select editFieldInput" id="genre" name="genre" aria-describedby="validationServer04Feedback">
                                                     <option selected style="display: none;">
                                                         <th:block th:text="${EditableBook.getGenre()}"></th:block>
                                                     </option>
@@ -130,7 +130,7 @@
                                             <!-- Publisher -->
                                             <div class="row">
                                                 <label for="publisher" class="form-label editFieldLabel" th:text="#{publisher}">Издатель</label>
-                                                <select class="form-select editFieldInput" id="publisher" name="publisher" aria-describedby="validationServer04Feedback" required>
+                                                <select class="form-select editFieldInput" id="publisher" name="publisher" aria-describedby="validationServer04Feedback">
                                                     <option selected style="display: none;">
                                                         <th:block th:text="${EditableBook.getPublisher}"></th:block>
                                                     </option>
@@ -147,16 +147,12 @@
                                             <!-- PublishYear -->
                                             <div class="row">
                                                 <label for="publishYear" class="form-label editFieldLabel" th:text="#{year}">Год</label>
-                                                <input type="text" class="form-control editFieldInput" id="publishYear" th:field="*{publishYear}" th:unless="${EditableBook.getPublishYear()} == null">
-                                                <!-- Чтобы не отображался ноль, если это новая книга -->
-                                                <input type="text" class="form-control editFieldInput" id="publishYear" name="publishYear" th:if="${EditableBook.getPublishYear()} == null">
+                                                <input type="text" th:field="*{publishYear}" class="form-control editFieldInput" id="publishYear">
                                             </div>
                                             <!-- PageCount -->
                                             <div class="row">
                                                 <label for="page_count" class="form-label editFieldLabel" th:text="#{page_count}">Кол-во страниц</label>
-                                                <input type="text" class="form-control editFieldInput" id="page_count" th:field="*{pageCount}" th:unless="${EditableBook.getPageCount()} == 0">
-                                                <!-- Чтобы не отображался ноль, если это новая книга -->
-                                                <input type="text" class="form-control editFieldInput" id="page_count" name="pageCount" th:if="${EditableBook.getPageCount()} == 0">
+                                                <input type="text" class="form-control editFieldInput" id="page_count" th:field="*{pageCount}">
                                             </div>
                                             <!-- Без этого значения полей будут потеряны -->
                                             <input type="hidden" form="EditBookForm" th:field="*{image}">

@@ -53,12 +53,12 @@ public class BookEntity {
 
         model.setId(id);
         model.setName(name);
-        model.setPageCount(pageCount);
+        model.setPageCount(String.valueOf(pageCount));
         model.setIsbn(isbn);
         model.setGenre(genre.getLocalizedName());
         model.setAuthor(author.getLocalizedFio());
         model.setPublisher(publisher.getLocalizedName());
-        model.setPublishYear(publishYear);
+        model.setPublishYear(String.valueOf(publishYear));
         model.setImage(image);
         model.setAvgRating(avgRating);
         model.setTotalVoteCount(totalVoteCount);
