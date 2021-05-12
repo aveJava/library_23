@@ -6,7 +6,31 @@
     <title>Navbar</title>
 </head>
 <body>
-    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+    <!-- Навбар для Главной страницы -->
+    <div th:fragment="navbar-main"
+         th:with="firstButtonLabel=#{dict}, firstButtonHref='/catalogs',
+                          secondButtonLabel=#{add_book}, secondButtonHref='/books/new'">
+
+        <div th:insert="~{fragments/navbar :: main}"></div>
+
+    </div>
+
+
+    <!-- Навбар для страницы Справочники -->
+    <div th:fragment="navbar-catalogs"
+         th:with="firstButtonLabel=#{back}, firstButtonHref='/main_page', secondButtonLabel=#{add_value},
+                      secondButtonHref=${tab.name() == 'AUTHORS' ? '/authors/new' : ''} +
+                                       ${tab.name() == 'GENRES' ? '/genges/new' : ''} +
+                                       ${tab.name() == 'PUBLISHERS' ? '/publishers/new' : ''}">
+
+        <div th:insert="~{fragments/navbar :: main}"></div>
+
+    </div>
+
+
+    <!-- Ненастроенный навбар (шаблон навбара) -->
+    <div th:fragment="main">
 
         <div class="container-fluid" style="padding: 0px;">
             <div class="row myNavbar" style="padding: 0px; width: 100.65%">
@@ -15,14 +39,14 @@
                 <div class="col-5" style="padding-left: 12vw; margin-top: -3px;">
                     <img class="logoImg" th:src="@{/static/images/books.png}" dataURI="true" onclick="location.href='/main_page/search?type=all'"/>
                     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
-                       href="" th:text="#{dict}">Справочники</a>
+                       th:href="${firstButtonHref}" th:text="${firstButtonLabel}">Первая кнопка навбара</a>
                     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
-                       href="/books/new" th:text="#{add_book}">Добавить книгу</a>
+                       th:href="${secondButtonHref}" th:text="${secondButtonLabel}">Вторая кнопка навбара</a>
                 </div>
                 <!-- Языки, поиск -->
                 <div class="col-4" style="display: flex; justify-content: flex-end;">
-                    <a href="/?lang=ru" class="btn btn-dark navButton" style="display: inline-block;" th:text="#{ru}">Рус</a>
-                    <a href="/?lang=en" class="btn btn-dark navButton" style="display: inline-block; margin: 0 1vw 0 -0.5vw;" th:text="#{en}">Анг</a>
+                    <a th:href="@{''(lang=ru)}" class="btn btn-dark navButton" style="display: inline-block;" th:text="#{ru}">Рус</a>
+                    <a th:href="@{''(lang=en)}" class="btn btn-dark navButton" style="display: inline-block; margin: 0 1vw 0 -0.5vw;" th:text="#{en}">Анг</a>
                     <form class="d-flex" th:method="GET" th:action="@{/main_page/search}" style="display: inline-block;">
                         <input type="hidden" name="type" value="keywords">
                         <input type="search" class="form-control me-2 myNavbarSearch" th:placeholder="#{search}" name="keywords">
