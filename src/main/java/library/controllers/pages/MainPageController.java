@@ -6,9 +6,8 @@ import library.service.AuthorEntityService;
 import library.service.BookEntityService;
 import library.service.GenreEntityService;
 import library.service.PublisherEntityService;
-import org.springframework.context.MessageSource;
+import library.utils.MessLocalizer;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -46,18 +45,14 @@ public class MainPageController {
     long genreId;                   // id жанра (для поиска по жанру)
     String[] keywords;              // ключевые слова поиска (для поиска по keywords)
 
-    MessageSource messageSource;
-
     public MainPageController(AuthorEntityService authorService, BookEntityService bookService,
                               GenreEntityService genreService, PublisherEntityService publisherService,
-                              UserController userController, ResourceBundleMessageSource messageSource) {
+                              UserController userController) {
         this.authorService = authorService;
         this.bookService = bookService;
         this.genreService = genreService;
         this.publisherService = publisherService;
         this.userController = userController;
-
-        this.messageSource = messageSource;
 
         // настройки первого посещения (отображаем все книги, первую страницу, 10 элементов на странице)
         pageNumber = 1;
@@ -132,11 +127,10 @@ public class MainPageController {
     // формирует сообщение о критериях, по которым был выполнен поиск, показываемое пользователю
     public String getSearchMessage() {
         // получение локализованных сообщений
-        Locale locale = LocaleContextHolder.getLocale();
-        String empty = messageSource.getMessage("empty", null, locale);
-        String found = messageSource.getMessage("found", null, locale);
-        String genre = messageSource.getMessage("genre", null, locale);
-        String search = messageSource.getMessage("search", null, locale);
+        String empty = MessLocalizer.get("empty");
+        String found = MessLocalizer.get("found");
+        String genre = MessLocalizer.get("genre");
+        String search = MessLocalizer.get("search");
 
         // составление локализованного сообщения о критериях поиска
         String message;
