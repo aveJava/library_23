@@ -5,7 +5,28 @@
     <title>Toolbar</title>
 </head>
 <body>
-    <div th:fragment="main">    <!-- блок, который можно будет включить в другую html-страницу -->
+
+"toolbarControllerAddress", "/catalogs/toolbar"
+    <!-- Tулбар для Главной страницы -->
+    <div th:fragment="toolbar-main"
+         th:with="toolbarControllerAddress='/main_page/toolbar'">
+
+        <div th:insert="~{fragments/toolbar :: main}"></div>
+
+    </div>
+
+
+    <!-- Tулбар для страницы Справочники -->
+    <div th:fragment="toolbar-catalogs"
+         th:with="toolbarControllerAddress='/catalogs/toolbar'">
+
+        <div th:insert="~{fragments/toolbar :: main}"></div>
+
+    </div>
+
+
+    <!-- Ненастроенный тулбар (шаблон тулбара) -->
+    <div th:fragment="main">
 
         <div class="container-fluid toolbarContainer">
             <!-- Номер текущей страницы -->
