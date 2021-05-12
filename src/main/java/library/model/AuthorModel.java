@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import java.util.Date;
 import java.util.Locale;
 
 
@@ -19,7 +18,11 @@ public class AuthorModel {
 
     private String enFio;
 
-    private Date birthday;
+    private String birthday_year;
+
+    private String birthday_month;
+
+    private String birthday_day;
 
     @Override
     public String toString() {
