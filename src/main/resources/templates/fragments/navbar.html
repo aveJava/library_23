@@ -38,36 +38,45 @@
                 <!-- Лейбл, справочники, добавление книги -->
                 <div class="col-5" style="padding-left: 12vw; margin-top: -3px;">
                     <img class="logoImg" th:src="@{/static/images/books.png}" dataURI="true" onclick="location.href='/main_page/search?type=all'"/>
-                    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
+                    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" style="display: inline-block; width: 5.5vw; margin-right: 0.5vw;" class="navButton"
                        th:href="${firstButtonHref}" th:text="${firstButtonLabel}">Первая кнопка навбара</a>
-                    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" class="btn btn-dark navButton"
+                    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')" style="display: inline-block; width: 9vw;"  class="navButton"
                        th:href="${secondButtonHref}" th:text="${secondButtonLabel}">Вторая кнопка навбара</a>
                 </div>
                 <!-- Языки, поиск -->
                 <div class="col-4" style="display: flex; justify-content: flex-end;">
-                    <a th:href="@{''(lang=ru)}" class="btn btn-dark navButton" style="display: inline-block;" th:text="#{ru}">Рус</a>
-                    <a th:href="@{''(lang=en)}" class="btn btn-dark navButton" style="display: inline-block; margin: 0 1vw 0 -0.5vw;" th:text="#{en}">Анг</a>
+                    <a th:href="@{''(lang=ru)}" class="navButton" style="display: inline-block; margin-right: 0.5vw; width: 1.5vw;" th:text="#{ru}">Рус</a>
+                    <a th:href="@{''(lang=en)}" class="navButton" style="display: inline-block; margin: auto 1.5vw auto 0;" th:text="#{en}">Анг</a>
                     <form class="d-flex" th:method="GET" th:action="@{/main_page/search}" style="display: inline-block;">
                         <input type="hidden" name="type" value="keywords">
                         <input type="search" class="form-control me-2 myNavbarSearch" th:placeholder="#{search}" name="keywords">
                     </form>
                 </div>
                 <!-- Текущий пользователь -->
-                <div class="col-2" style="text-align: right; padding: 0;">
+                <div class="col-2" style="text-align: right; margin: auto;">
                     <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"
-                       href="/registration" class="btn btn-dark navButton myNavbarUserButton" th:text="#{reg}">Зарегистрироваться</a>
+                       href="/registration" class="navButton myNavbarUserButton" style="display: contents" th:text="#{reg}">Зарегистрироваться</a>
                     <p th:if="${userController} != null AND ${userController.getCurrentUser()} != null"
-                       class="btn btn-dark navButton myNavbarUserButton"
-                       style="display: table-cell; text-align: right; width: 16vw; padding: 12px 0;"
+                       class="navButton myNavbarUserButton"
+                       style="display: table-cell; text-align: right; width: 16vw;"
                        th:text="#{welcome} + ${userController.getCurrentUser().getUsername()}"></p>
                 </div>
                 <!-- Выход -->
-                <div class="col-1" style="text-align: left; padding: 0;">
+                <div class="col-1" style="text-align: left; margin: auto;">
                     <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"
-                       href="/login" class="btn btn-dark navButton myNavbarExitButton" th:text="#{login}">Войти</a>
+                       href="/login" class="navButton myNavbarExitButton" style="display: table; margin-left: -0.5vw;" th:text="#{login}">Войти</a>
                     <a th:if="${userController} != null AND ${userController.getCurrentUser()} != null"
-                       href="/logout" class="btn btn-dark navButton myNavbarExitButton" th:text="#{logout}">Выйти</a>
+                       href="/logout" class="navButton myNavbarExitButton" style="display: table; margin-left: -0.5vw;" th:text="#{logout}">Выйти</a>
                 </div>
+
+
+
+<!--                <div class="col-1" style="text-align: left; padding: 0;">-->
+<!--                    <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"-->
+<!--                       href="/login" class="btn btn-dark navButton myNavbarExitButton" th:text="#{login}">Войти</a>-->
+<!--                    <a th:if="${userController} != null AND ${userController.getCurrentUser()} != null"-->
+<!--                       href="/logout" class="btn btn-dark navButton myNavbarExitButton" th:text="#{logout}">Выйти</a>-->
+<!--                </div>-->
             </div>
         </div>
 
