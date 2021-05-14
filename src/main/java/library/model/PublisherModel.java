@@ -1,5 +1,6 @@
 package library.model;
 
+import library.domain.PublisherEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,16 @@ public class PublisherModel {
     private String ruName;
 
     private String enName;
+
+    public PublisherEntity toPublisherEntity() {
+        PublisherEntity entity = new PublisherEntity();
+
+        entity.setId(id);
+        entity.setRuName(ruName);
+        entity.setEnName(enName);
+
+        return entity;
+    }
 
     @Override
     public String toString() {

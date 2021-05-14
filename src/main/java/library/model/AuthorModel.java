@@ -1,10 +1,14 @@
 package library.model;
 
+import library.domain.AuthorEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -18,11 +22,25 @@ public class AuthorModel {
 
     private String enFio;
 
-    private String birthday_year;
+    private String birthdayYear;
 
-    private String birthday_month;
+    private String birthdayMonth;
 
-    private String birthday_day;
+    private String birthdayDay;
+
+    public AuthorEntity toAuthorEntity() {
+        AuthorEntity entity = new AuthorEntity();
+
+        entity.setId(id);
+        entity.setRuFio(ruFio);
+        entity.setEnFio(enFio);
+        LocalDate birthday = LocalDate.of(Integer.parseInt(birthdayYear),
+                Integer.parseInt(birthdayMonth), Integer.parseInt(birthdayDay));
+        Date birth = Date.from(birthday.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        entity.setBirthday(birth);
+
+        return entity;
+    }
 
     @Override
     public String toString() {
