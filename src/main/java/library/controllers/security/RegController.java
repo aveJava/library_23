@@ -37,7 +37,7 @@ public class RegController {
         boolean hasError = false;
         String errorMsg = null;
 
-        if (stage.equals("username")) {             // стадия выбора имени
+        if ("username".equals(stage)) {             // стадия выбора имени
             // проверка имени на ошибки
             if (user.getUsername() == null || user.getUsername().isEmpty()) {
                 hasError = true;
@@ -55,7 +55,7 @@ public class RegController {
             }
         }
 
-        if (stage.equals("password")) {             // стадия выбора пароля
+        if ("password".equals(stage)) {             // стадия выбора пароля
 
             String password = user.getPassword();
             String passConfirm = user.getPasswordConfirm();
