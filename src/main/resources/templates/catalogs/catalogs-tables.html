@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables</title>
+</head>
+<body>
+
+    <!-- Фрагмент -->
+    <div th:fragment="main">
+        <div class="container-fluid" style="background-color: skyblue; min-height: 35vw;">
+            <div class="row" style="height: 1vw"></div>     <!-- Отступ сверху -->
+            <div class="row">
+                <div class="col-1"></div>           <!-- Отступ слева -->
+                <div class="col-10" style="width: 75vw; margin: 0 auto;">
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs card-header-tabs" id="tabs" style="justify-content: center;">
+                        <li class="nav-item">
+                            <a th:class="'nav-link ' + ${tab.name() == 'AUTHORS' ? 'active' : ''}" href="#authors" data-toggle="tab" th:text="#{authors}"
+                               th:onclick="'location.href=\'/catalogs/switch?tab=AUTHORS\''">Авторы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:class="'nav-link ' + ${tab.name() == 'GENRES' ? 'active' : ''}" href="#genres" data-toggle="tab" th:text="#{genres}"
+                               th:onclick="'location.href=\'/catalogs/switch?tab=GENRES\''">Жанры</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:class="'nav-link ' + ${tab.name() == 'PUBLISHERS' ? 'active' : ''}" href="#publishers" data-toggle="tab" th:text="#{publishers}"
+                               th:onclick="'location.href=\'/catalogs/switch?tab=PUBLISHERS\''">Издатели</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tables -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <!-- Authors -->
+                            <div th:if="${tab.name()} == 'AUTHORS'" class="tab-pane active" id="authors">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" width="30%">[[#{catalogs_name_ru}]]</th>
+                                        <th scope="col" width="30%">[[#{catalogs_name_en}]]</th>
+                                        <th scope="col" width="30%">[[#{catalogs_birthday}]]</th>
+                                        <th scope="col" width="5%" class="centerAline">[[#{catalogs_edit}]]</th>
+                                        <th scope="col" width="5%" class="centerAline">[[#{catalogs_delete}]]</th>
+                                    </tr>
+                                    </thead>
+                                    <th:block th:each="author : ${authors}">
+                                        <!-- Если данная запись не редактируется в данный момент -->
+                                        <tbody th:if="${editingTab} != 'AUTHORS' OR ${author.getId} != ${editingId}"
+                                               th:attr="bgcolor=${tableFillCounter.isNextLineFilled() ? '#c9d2a5' : '#eaddb2'}">
+                                        <th scope="col" width="30%" th:text="${author.getRuFio()}">Имя</th>
+                                        <th scope="col" width="30%" th:text="${author.getEnFio()}">Name</th>
+                                        <th scope="col" width="30%" th:text="${#dates.format(author.getBirthday(), 'yyyy-MM-dd')}">Дата рождения</th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <img src="static/images/edit.png" class="editButton" th:onclick="'location.href=\'/authors/' + ${author.getId} + '/edit\''">
+                                        </th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <form id="DeleteAuthForm" th:action="'/authors/' + ${author.getId}" th:method="delete">
+                                                <button type="submit" style="border: 0; padding: 0;">
+                                                    <img src="static/images/delete.png" class="deleteButton">
+                                                </button>
+                                            </form>
+                                        </th>
+                                        </tbody>
+                                        <!-- Если данная запись редактируется в данный момент -->
+                                        <tbody th:if="${editingTab} == 'AUTHORS' AND ${author.getId} == ${editingId}">
+                                        <form id="EditAuthForm" th:action="'/authors/' + ${EditingEntry.getId}" th:method="patch" th:object="${EditingEntry}">
+                                            <th scope="col" width="30%"><input type="text" th:field="*{ruFio}"></th>
+                                            <th scope="col" width="30%"><input type="text" th:field="*{enFio}"></th>
+                                            <th scope="col" width="30%">
+                                                <input type="text" th:field="*{birthdayYear}" style="width: 12%;" th:placeholder="#{entry_placeholder_year}"> /
+                                                <input type="text" th:field="*{birthdayMonth}" style="width: 12%;" th:placeholder="#{entry_placeholder_month}"> /
+                                                <input type="text" th:field="*{birthdayDay}" style="width: 12%;" th:placeholder="#{entry_placeholder_day}">
+                                            </th>
+                                        </form>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <button type="submit" form="EditAuthForm" style="border: 0; padding: 0; width: 0%; height: 0; padding-right: 1.2vw;">
+                                                <img src="static/images/ok.jpg" class="ok_icon" style="margin-top: -0.1vw;" th:title="#{catalogs_confirm}">
+                                            </button>
+                                        </th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <img src="static/images/not_ok.jpg" class="ok_icon" th:onclick="'location.href=\'/catalogs\''" th:title="#{catalogs_cancel}">
+                                        </th>
+                                        </tbody>
+                                    </th:block>
+                                </table>
+                                <!-- Toolbar -->
+                                <div th:insert="~{fragments/toolbar :: toolbar-catalogs}"></div>
+                            </div>
+
+                            <!-- Genres -->
+                            <div th:if="${tab.name()} == 'GENRES'" class="tab-pane active" id="genres">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" width="45%">[[#{catalogs_name_ru}]]</th>
+                                        <th scope="col" width="45%">[[#{catalogs_name_en}]]</th>
+                                        <th scope="col" width="5%" class="centerAline">[[#{catalogs_edit}]]</th>
+                                        <th scope="col" width="5%" class="centerAline">[[#{catalogs_delete}]]</th>
+                                    </tr>
+                                    </thead>
+                                    <th:block th:each="genre : ${genres}">
+                                        <!-- Если данная запись не редактируется в данный момент -->
+                                        <tbody th:if="${editingTab} != 'GENRES' OR ${genre.getId} != ${editingId}"
+                                               th:attr="bgcolor=${tableFillCounter.isNextLineFilled() ? '#c9d2a5' : '#eaddb2'}">
+                                        <th scope="col" width="45%" th:text="${genre.getRuName()}">Имя</th>
+                                        <th scope="col" width="45%" th:text="${genre.getEnName()}">Name</th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <img src="static/images/edit.png" class="editButton" th:onclick="'location.href=\'/genres/' + ${genre.getId} + '/edit\''">
+                                        </th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <form id="DeleteGenreForm" th:action="'/genres/' + ${genre.getId}" th:method="delete">
+                                                <button type="submit" style="border: 0; padding: 0;">
+                                                    <img src="static/images/delete.png" class="deleteButton">
+                                                </button>
+                                            </form>
+                                        </th>
+                                        </tbody>
+                                        <!-- Если данная запись редактируется в данный момент -->
+                                        <tbody th:if="${editingTab} == 'GENRES' AND ${genre.getId} == ${editingId}">
+                                        <form id="EditGenreForm" th:action="'/genres/' + ${EditingEntry.getId}" th:method="patch" th:object="${EditingEntry}">
+                                            <th scope="col" width="45%"><input type="text" th:field="*{ruName}"></th>
+                                            <th scope="col" width="45%"><input type="text" th:field="*{enName}"></th>
+                                        </form>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <button type="submit" form="EditGenreForm" style="border: 0; padding: 0; width: 0%; height: 0; padding-right: 1.2vw;">
+                                                <img src="static/images/ok.jpg" class="ok_icon" style="margin-top: -0.1vw;" th:title="#{catalogs_confirm}">
+                                            </button>
+                                        </th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <img src="static/images/not_ok.jpg" class="ok_icon" th:onclick="'location.href=\'/catalogs\''" th:title="#{catalogs_cancel}">
+                                        </th>
+                                        </tbody>
+                                    </th:block>
+                                </table>
+                                <!-- Toolbar -->
+                                <div th:insert="~{fragments/toolbar :: toolbar-catalogs}"></div>
+                            </div>
+
+                            <!-- Publishers -->
+                            <div th:if="${tab.name()} == 'PUBLISHERS'" class="tab-pane active" id="publishers">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" width="45%">[[#{catalogs_name_ru}]]</th>
+                                        <th scope="col" width="45%">[[#{catalogs_name_en}]]</th>
+                                        <th scope="col" width="5%" class="centerAline">[[#{catalogs_edit}]]</th>
+                                        <th scope="col" width="5%" class="centerAline">[[#{catalogs_delete}]]</th>
+                                    </tr>
+                                    </thead>
+                                    <th:block th:each="publisher : ${publishers}">
+                                        <!-- Если данная запись не редактируется в данный момент -->
+                                        <tbody th:if="${editingTab} != 'PUBLISHERS' OR ${publisher.getId} != ${editingId}"
+                                               th:attr="bgcolor=${tableFillCounter.isNextLineFilled() ? '#c9d2a5' : '#eaddb2'}">
+                                        <th scope="col" width="45%" th:text="${publisher.getRuName()}">Имя</th>
+                                        <th scope="col" width="45%" th:text="${publisher.getEnName()}">Name</th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <img src="static/images/edit.png" class="editButton" th:onclick="'location.href=\'/publishers/' + ${publisher.getId} + '/edit\''">
+                                        </th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <form id="DeletePublishForm" th:action="'/publishers/' + ${publisher.getId}" th:method="delete">
+                                                <button type="submit" style="border: 0; padding: 0;">
+                                                    <img src="static/images/delete.png" class="deleteButton">
+                                                </button>
+                                            </form>
+                                        </th>
+                                        </tbody>
+                                        <!-- Если данная запись редактируется в данный момент -->
+                                        <tbody th:if="${editingTab} == 'PUBLISHERS' AND ${publisher.getId} == ${editingId}">
+                                        <form id="EditPublishForm" th:action="'/publishers/' + ${EditingEntry.getId}" th:method="patch" th:object="${EditingEntry}">
+                                            <th scope="col" width="45%"><input type="text" th:field="*{ruName}"></th>
+                                            <th scope="col" width="45%"><input type="text" th:field="*{enName}"></th>
+                                        </form>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <button type="submit" form="EditPublishForm" style="border: 0; padding: 0; width: 0%; height: 0; padding-right: 1.2vw;">
+                                                <img src="static/images/ok.jpg" class="ok_icon" style="margin-top: -0.1vw;" th:title="#{catalogs_confirm}">
+                                            </button>
+                                        </th>
+                                        <th scope="col" width="5%" class="centerAline">
+                                            <img src="static/images/not_ok.jpg" class="ok_icon" th:onclick="'location.href=\'/catalogs\''" th:title="#{catalogs_cancel}">
+                                        </th>
+                                        </tbody>
+                                    </th:block>
+                                </table>
+                                <!-- Toolbar -->
+                                <div th:insert="~{fragments/toolbar :: toolbar-catalogs}"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>           <!-- Отступ справа -->
+            </div>
+            <div class="row" style="height: 0.5vw"></div>     <!-- Отступ снизу -->
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+
+
+.editButton {
+    width: 1.2vw;
+    height: auto;
+    z-index: 1;
+    padding: 0;
+    margin: -0.2vw 0.25vw 0;
+}
+
+.editButton:hover {
+    border: #5383d3;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.5); /* Параметры тени */
+    padding: 0px;
+}
+
+.deleteButton {
+    width: 0.95vw;
+    height: auto;
+    margin-top: -0.2vw;
+    padding: 0;
+    z-index: 1;
+}
+
+.deleteButton:hover {
+    border: #5383d3;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.5); /* Параметры тени */
+    padding: 0px;
+}
+
+.ok_icon {
+    width: 1.2vw;
+}
+
+.ok_icon:hover {
+    width: 1.3vw;
+}
+
+.centerAline {
+    vertical-align: middle;
+    text-align: -webkit-center;
+}
+
+.createFormLabel {
+    width: 7.5vw;
+    margin-bottom: 0.8vw;
+}
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new entry</title>
+</head>
+<body>
+
+    <!-- Фрагмент -->
+    <div th:fragment="main">
+
+            <!-- Заклинание на поднятие модального окна удаления по завершении загрузки страницы -->
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#CreateNewEntryWindow').modal('show')
+                })
+            </script>
+
+
+            <!-- Modal window -->
+            <div class="modal fade" id="CreateNewEntryWindow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-show="true">
+                <div class="modal-dialog modal-dialog-centered modal-md" style="width: 25%;">
+                    <div class="modal-content" style="width: 22vw;">
+                        <!-- Заголовок -->
+                        <div class="modal-header">
+                            <div th:switch="${tab.name()}">
+                                <h5 class="modal-title" th:case="'AUTHORS'" th:text="#{new_author_title}">Новый автор</h5>
+                                <h5 class="modal-title" th:case="'GENRES'" th:text="#{new_genre_title}">Новый жанр</h5>
+                                <h5 class="modal-title" th:case="'PUBLISHERS'" th:text="#{new_publisher_title}">Новый издатель</h5>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Содержание -->
+                        <div class="modal-body" style="margin-bottom: -0.6vw; width: 30vw">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <!-- Форма создания нового Автора -->
+                                    <form th:if="${domain} == 'authors'" id="createEntryForm" action="/authors" th:method="post" th:object="${EditObj}">
+                                        <label for="ruFio" class="createFormLabel">Имя</label>
+                                        <input type="text" id="ruFio" th:field="*{ruFio}" style="width: 42%;">
+                                        <br>
+                                        <label for="enFio" class="createFormLabel">Name</label>
+                                        <input type="text" id="enFio" th:field="*{enFio}" style="width: 42%;">
+                                        <br>
+                                        <label class="createFormLabel">Дата рождения</label>
+                                        <input type="text" id="birthdayYear" th:field="*{birthdayYear}" style="width: 12%;" th:placeholder="#{entry_placeholder_year}"> /
+                                        <input type="text" id="birthdayMonth" th:field="*{birthdayMonth}" style="width: 12%;" th:placeholder="#{entry_placeholder_month}"> /
+                                        <input type="text" id="birthdayDay" th:field="*{birthdayDay}" style="width: 12%;" th:placeholder="#{entry_placeholder_day}">
+                                    </form>
+
+                                    <!-- Форма создания нового Жанра -->
+                                    <form th:if="${domain} == 'genres'" id="createEntryForm" action="/genres" th:method="post" th:object="${EditObj}">
+                                        <label for="ruName" class="createFormLabel">Имя</label>
+                                        <input type="text" id="ruName" th:field="*{ruName}">
+                                        <br>
+                                        <label for="enName" class="createFormLabel">Name</label>
+                                        <input type="text" id="enName" th:field="*{enName}">
+                                    </form>
+
+                                    <!-- Форма создания нового Издателя -->
+                                    <form th:if="${domain} == 'publishers'" id="createEntryForm" action="/publishers" th:method="post" th:object="${EditObj}">
+                                        <label for="ruName" class="createFormLabel">Имя</label>
+                                        <input type="text" id="ruName" th:field="*{ruName}">
+                                        <br>
+                                        <label for="enName" class="createFormLabel">Name</label>
+                                        <input type="text" id="enName" th:field="*{enName}">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Футер -->
+                        <div class="modal-footer" style="display: table-footer-group; text-align: end;">
+                            <input type="submit" form="createEntryForm" value="Создать">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Errors</title>
+</head>
+<body>
+
+    <!-- Фрагмент -->
+    <div th:fragment="main">
+
+            <!-- Заклинание на поднятие модального окна удаления по завершении загрузки страницы -->
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#ErrorsModalWindow').modal('show')
+                })
+            </script>
+
+
+            <!-- Modal window -->
+            <div class="modal fade" id="ErrorsModalWindow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-show="true">
+                <div class="modal-dialog modal-dialog-centered modal-md" style="width: 25%;">
+                    <div class="modal-content">
+                        <!-- Заголовок -->
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ошибки</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Содержание -->
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <!-- Сообщения об ошибках -->
+                                    <div class="row">
+                                        <div class="container-fluid">
+                                            <div th:each="err : ${errors}">
+                                                <div>
+                                                    <img src="static/images/warning.jpg" style="width: 1.5vw; display: inline-block;">
+                                                    <th:block th:text="${err}" style="color: firebrick; font-style: italic; font-family: monospace; font-size: 118%;"></th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Футер -->
+                        <div class="modal-footer" style="display: table-footer-group; text-align: end;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  style="margin-right: 1%;">ОК</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ErrorPage</title>
+    <!-- Подключение стилей Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+          crossorigin="anonymous">
+    <!-- Подключение своих стилей -->
+    <link href="/static/css/navbar.css" rel="stylesheet">
+    <link href="/static/css/catalogs.css" rel="stylesheet">
+    <link href="static/css/toolbar.css" rel="stylesheet">
+    <link href="/static/css/footer.css" rel="stylesheet">
+    <!-- Свой стиль для этой страницы -->
+    <style>
+        body {
+            margin: 0;
+        }
+        .generalContainer {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <!-- Подключение fontawesome (библиотеки иконок) -->
+    <script src="https://use.fontawesome.com/7311ed3073.js"></script>
+    <!-- Подключение JavaScript'а для работы выпадающего списка -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <!-- Подключение JQuery (используется для поднятия модального окна) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- Для переключения вкладок -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <!-- Общий контейнер -->
+    <div class="container-fluid generalContainer">
+
+        <!-- Navbar -->
+        <div th:insert="~{fragments/navbar :: navbar-catalogs}"></div>
+
+
+        <!-- Catalogs -->
+        <div th:insert="~{catalogs/catalogs-tables :: main}"></div>
+
+
+        <!-- Footer -->
+        <div th:insert="~{fragments/footer :: main}"></div>
+
+
+        <!-- Modal windows (create new entry & error messages) -->
+        <div th:insert="~{catalogs/catalogs-modal-window-errors :: main}" th:if="${ShowErrorsModalWindow}"></div>
+        <div th:insert="~{catalogs/catalogs-modal-window-craete-new-entry :: main}" th:if="${ShowCreateNewEntryWindow}"></div>
+
+    </div>
+
+</body>
+</html>
