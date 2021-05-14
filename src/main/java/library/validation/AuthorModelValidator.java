@@ -24,9 +24,9 @@ public class AuthorModelValidator implements Validator {
         Long id = model.getId();
         String ruFio = model.getRuFio();
         String enFio = model.getEnFio();
-        String birthday_year = model.getBirthday_year();
-        String birthday_month = model.getBirthday_month();
-        String birthday_day = model.getBirthday_day();
+        String birthday_year = model.getBirthdayYear();
+        String birthday_month = model.getBirthdayMonth();
+        String birthday_day = model.getBirthdayDay();
 
         // ruFio
         if (ruFio == null || ruFio.isEmpty())
@@ -46,12 +46,12 @@ public class AuthorModelValidator implements Validator {
             Integer day = Integer.parseInt(birthday_day);
             birthday = LocalDate.of(year, month, day);
         } catch (NumberFormatException e) {
-            errors.rejectValue("birthday", "", "author_birthday_number_ex");
+            errors.rejectValue("birthdayYear", "", MessLocalizer.get("author_birthday_number_ex"));
         } catch (DateTimeException e) {
-            errors.rejectValue("birthday", "", "author_birthday_date_ex");
+            errors.rejectValue("birthdayYear", "", MessLocalizer.get("author_birthday_date_ex"));
         }
-        if (birthday.isAfter(LocalDate.now()))
-            errors.rejectValue("birthday", "", "author_birthday_before");
+        if (birthday != null && birthday.isAfter(LocalDate.now()))
+            errors.rejectValue("birthdayYear", "", MessLocalizer.get("author_birthday_before"));
     }
 
 }
