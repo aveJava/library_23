@@ -35,4 +35,5 @@ public class RoleEntityService implements RoleEntityDao {
     public void delete(RoleEntity role) {
         roleRepo.delete(role);
     }
+
 }
