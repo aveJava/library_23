@@ -18,7 +18,7 @@
 
     <!-- Tулбар для страницы Справочники -->
     <div th:fragment="toolbar-catalogs"
-         th:with="toolbarControllerAddress='/catalogs/toolbar'">
+         th:with="toolbarControllerAddress='/catalogs/toolbar/' + ${tab}">
 
         <div th:insert="~{fragments/toolbar :: main}"></div>
 

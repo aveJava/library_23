@@ -21,7 +21,7 @@
     <div th:fragment="navbar-catalogs"
          th:with="firstButtonLabel=#{back}, firstButtonHref='/main_page', secondButtonLabel=#{add_value},
                       secondButtonHref=${tab.name() == 'AUTHORS' ? '/authors/new' : ''} +
-                                       ${tab.name() == 'GENRES' ? '/genges/new' : ''} +
+                                       ${tab.name() == 'GENRES' ? '/genres/new' : ''} +
                                        ${tab.name() == 'PUBLISHERS' ? '/publishers/new' : ''}">
 
         <div th:insert="~{fragments/navbar :: main}"></div>
@@ -69,14 +69,6 @@
                        href="/logout" class="navButton myNavbarExitButton" style="display: table; margin-left: -0.5vw;" th:text="#{logout}">Выйти</a>
                 </div>
 
-
-
-<!--                <div class="col-1" style="text-align: left; padding: 0;">-->
-<!--                    <a th:if="${userController} == null OR ${userController.getCurrentUser()} == null"-->
-<!--                       href="/login" class="btn btn-dark navButton myNavbarExitButton" th:text="#{login}">Войти</a>-->
-<!--                    <a th:if="${userController} != null AND ${userController.getCurrentUser()} != null"-->
-<!--                       href="/logout" class="btn btn-dark navButton myNavbarExitButton" th:text="#{logout}">Выйти</a>-->
-<!--                </div>-->
             </div>
         </div>
 
