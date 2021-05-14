@@ -1,5 +1,6 @@
 package library.domain;
 
+import library.model.AuthorModel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +39,22 @@ public class AuthorEntity {
 
     @OneToMany(mappedBy = "author", fetch=FetchType.LAZY) // author - имя поля в классе Book
     private List<BookEntity> books;
+
+    public AuthorModel toAuthorModel() {
+        AuthorModel model = new AuthorModel();
+
+        model.setId(id);
+        model.setRuFio(ruFio);
+        model.setEnFio(enFio);
+        LocalDate birth = birthday.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        model.setBirthdayYear(String.valueOf(birth.getYear()));
+        model.setBirthdayMonth(String.valueOf(birth.getMonthValue()));
+        model.setBirthdayDay(String.valueOf(birth.getDayOfMonth()));
+
+        return model;
+    }
 
     @Override
     public String toString() {

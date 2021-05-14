@@ -1,5 +1,6 @@
 package library.domain;
 
+import library.model.PublisherModel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,16 @@ public class PublisherEntity {
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)  // publisher - имя поля в классе Book
     private List<BookEntity> books;
+
+    public PublisherModel toPublisherModel() {
+        PublisherModel model = new PublisherModel();
+
+        model.setId(id);
+        model.setRuName(ruName);
+        model.setEnName(enName);
+
+        return model;
+    }
 
     @Override
     public String toString() {

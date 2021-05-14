@@ -1,5 +1,6 @@
 package library.domain;
 
+import library.model.GenreModel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,16 @@ public class GenreEntity {
 
     @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
     private List<BookEntity> books;
+
+    public GenreModel toGenreModel() {
+        GenreModel model = new GenreModel();
+
+        model.setId(id);
+        model.setRuName(ruName);
+        model.setEnName(enName);
+
+        return model;
+    }
 
     @Override
     public String toString() {
