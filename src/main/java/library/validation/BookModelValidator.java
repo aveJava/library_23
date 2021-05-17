@@ -85,6 +85,13 @@ public class BookModelValidator implements Validator {
                 errors.rejectValue("isbn", "year_invalid", MessLocalizer.get("year_invalid"));
         }
 
+        // описание
+        String description = model.getDescription();
+        if (description.length() > 500) {
+            String mess = MessLocalizer.get("description_size").replace("*%*", String.valueOf(description.length()));
+            errors.rejectValue("description", "description_size", mess);
+        }
+
         // проверка наличия изображения (обложки)
         if (model.getImage() == null) {
             MultipartFile uploadedImg = model.getUploadedImage();
