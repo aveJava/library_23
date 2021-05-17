@@ -17,21 +17,24 @@
                     <!-- Tabs -->
                     <ul class="nav nav-tabs card-header-tabs" id="tabs" style="justify-content: center;">
                         <li class="nav-item">
-                            <a th:class="'nav-link ' + ${tab.name() == 'AUTHORS' ? 'active' : ''}" href="#authors" data-toggle="tab" th:text="#{authors}"
+                            <a th:class="'nav-link myTabLink ' + ${tab.name() == 'AUTHORS' ? 'active' : ''}" href="#authors" data-toggle="tab" th:text="#{authors}"
+                               th:style="${tab.name() == 'AUTHORS' ? 'background: border-box; border-color: black black skyblue;' : ''}"
                                th:onclick="'location.href=\'/catalogs/switch?tab=AUTHORS\''">Авторы</a>
                         </li>
                         <li class="nav-item">
-                            <a th:class="'nav-link ' + ${tab.name() == 'GENRES' ? 'active' : ''}" href="#genres" data-toggle="tab" th:text="#{genres}"
+                            <a th:class="'nav-link myTabLink ' + ${tab.name() == 'GENRES' ? 'active' : ''}" href="#genres" data-toggle="tab" th:text="#{genres}"
+                               th:style="${tab.name() == 'GENRES' ? 'background: border-box; border-color: black black skyblue;' : ''}"
                                th:onclick="'location.href=\'/catalogs/switch?tab=GENRES\''">Жанры</a>
                         </li>
                         <li class="nav-item">
-                            <a th:class="'nav-link ' + ${tab.name() == 'PUBLISHERS' ? 'active' : ''}" href="#publishers" data-toggle="tab" th:text="#{publishers}"
+                            <a th:class="'nav-link myTabLink ' + ${tab.name() == 'PUBLISHERS' ? 'active' : ''}" href="#publishers" data-toggle="tab" th:text="#{publishers}"
+                               th:style="${tab.name() == 'PUBLISHERS' ? 'background: border-box; border-color: black black skyblue;' : ''}"
                                th:onclick="'location.href=\'/catalogs/switch?tab=PUBLISHERS\''">Издатели</a>
                         </li>
                     </ul>
 
                     <!-- Tables -->
-                    <div class="card-body">
+                    <div class="card-body myCardBody">
                         <div class="tab-content">
                             <!-- Authors -->
                             <div th:if="${tab.name()} == 'AUTHORS'" class="tab-pane active" id="authors">
