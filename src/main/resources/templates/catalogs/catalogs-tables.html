@@ -36,6 +36,9 @@
                     <!-- Tables -->
                     <div class="card-body myCardBody">
                         <div class="tab-content">
+                            <!-- Search message -->
+                            <p style="text-align: center;" th:text="${searchMess}">Сообщение о параметрах поиска</p>
+
                             <!-- Authors -->
                             <div th:if="${tab.name()} == 'AUTHORS'" class="tab-pane active" id="authors">
                                 <table class="table">

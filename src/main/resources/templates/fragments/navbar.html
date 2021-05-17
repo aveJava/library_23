@@ -10,7 +10,8 @@
     <!-- Навбар для Главной страницы -->
     <div th:fragment="navbar-main"
          th:with="firstButtonLabel=#{dict}, firstButtonHref='/catalogs',
-                          secondButtonLabel=#{add_book}, secondButtonHref='/books/new'">
+                  secondButtonLabel=#{add_book}, secondButtonHref='/books/new',
+                  searchAction=@{/main_page/search}">
 
         <div th:insert="~{fragments/navbar :: main}"></div>
 
@@ -20,9 +21,10 @@
     <!-- Навбар для страницы Справочники -->
     <div th:fragment="navbar-catalogs"
          th:with="firstButtonLabel=#{back}, firstButtonHref='/main_page', secondButtonLabel=#{add_value},
-                      secondButtonHref=${tab.name() == 'AUTHORS' ? '/authors/new' : ''} +
-                                       ${tab.name() == 'GENRES' ? '/genres/new' : ''} +
-                                       ${tab.name() == 'PUBLISHERS' ? '/publishers/new' : ''}">
+                  secondButtonHref=${tab.name() == 'AUTHORS' ? '/authors/new' : ''} +
+                                   ${tab.name() == 'GENRES' ? '/genres/new' : ''} +
+                                   ${tab.name() == 'PUBLISHERS' ? '/publishers/new' : ''},
+                  searchAction=@{/catalogs/search}">
 
         <div th:insert="~{fragments/navbar :: main}"></div>
 
@@ -47,7 +49,7 @@
                 <div class="col-4" style="display: flex; justify-content: flex-end;">
                     <a th:href="@{''(lang=ru)}" class="navButton" style="display: inline-block; margin-right: 0.5vw; width: 1.5vw;" th:text="#{ru}">Рус</a>
                     <a th:href="@{''(lang=en)}" class="navButton" style="display: inline-block; margin: auto 1.5vw auto 0;" th:text="#{en}">Анг</a>
-                    <form class="d-flex" th:method="GET" th:action="@{/main_page/search}" style="display: inline-block;">
+                    <form class="d-flex" th:method="GET" th:action="${searchAction}" style="display: inline-block;">
                         <input type="hidden" name="type" value="keywords">
                         <input type="search" class="form-control me-2 myNavbarSearch" th:placeholder="#{search}" name="keywords">
                     </form>

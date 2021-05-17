@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/catalogs")
 public class CatalogsController {
@@ -29,22 +31,20 @@ public class CatalogsController {
     private final UserController userController;
 
     /** Состояние страницы */
-    private Tab currentTab;                         // активная (текущая) вкладка
+    private Tab currentTab;                  // активная (текущая) вкладка
+    private Optional<String> keywords;       // ключевые слова поиска
     // для вкладки Авторы
     private int authTabPageNumber;           // номер текущей страницы (начиная с 1)
     private int authTabPageSize;             // кол-во записей (строк) на одной странице
     private int authTabMaxPageNumber;        // сколько всего страниц
-    private long authTabTotalElements;       // сколько всего элементов (на всех страницах)
     // для вкладки Жанры
     private int genTabPageNumber;
     private int genTabPageSize;
     private int genTabMaxPageNumber;
-    private long genTabTotalElements;
     // для вкладки Издатели
     private int pubTabPageNumber;
     private int pubTabPageSize;
     private int pubTabMaxPageNumber;
-    private long pubTabTotalElements;
 
     public CatalogsController(AuthorEntityService authorService, GenreEntityService genreService,
                               PublisherEntityService publisherService, UserController userController) {
@@ -55,9 +55,10 @@ public class CatalogsController {
         this.userController = userController;
 
         // настройки первого посещения (отображаем вкладку Авторы, первую страницу, 10 элементов на странице)
-        this.currentTab = Tab.AUTHORS;
+        currentTab = Tab.AUTHORS;
         authTabPageNumber = genTabPageNumber = pubTabPageNumber = 1;
         authTabPageSize = genTabPageSize = pubTabPageSize = 10;
+        keywords = Optional.empty();
     }
 
     // отображает страницу, согласно ее текущему состоянию
@@ -71,6 +72,14 @@ public class CatalogsController {
         addToolbarOptions(model);           // настройка toolbar
 
         return "pages/catalogs";
+    }
+
+    // принимает поисковые запросы
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "keywords", required = false) String keywords){
+        boolean isKeywordsPresent = keywords != null && !keywords.trim().isEmpty();
+        this.keywords = isKeywordsPresent ? Optional.of(keywords) : Optional.empty();
+        return "redirect:/catalogs";
     }
 
     // слушает кнопки тублара, меняет состояние страницы согласно пришедшему запросу
@@ -153,6 +162,23 @@ public class CatalogsController {
     // переключает вкладку
     @GetMapping("/switch")
     public String switchTab(@RequestParam("tab") Tab tab) {
+        // очистка параметров поиска для данной вкладки
+        if (keywords.isPresent()) {
+            keywords = Optional.empty();
+            switch (currentTab){
+                case AUTHORS:
+                    authTabPageNumber = 1;
+                    break;
+                case GENRES:
+                    genTabPageNumber = 1;
+                    break;
+                case PUBLISHERS:
+                    pubTabPageNumber = 1;
+                    break;
+            }
+        }
+
+        // переключение вкладки на новую
         switch (tab) {
             case AUTHORS:
                 currentTab = Tab.AUTHORS;
@@ -177,19 +203,16 @@ public class CatalogsController {
                 model.addAttribute("maxPage", authTabMaxPageNumber);
                 model.addAttribute("thisPage", authTabPageNumber);
                 model.addAttribute("pageSize", authTabPageSize);
-                model.addAttribute("totalElements", authTabTotalElements);
                 break;
             case GENRES:
                 model.addAttribute("maxPage", genTabMaxPageNumber);
                 model.addAttribute("thisPage", genTabPageNumber);
                 model.addAttribute("pageSize", genTabPageSize);
-                model.addAttribute("totalElements", genTabTotalElements);
                 break;
             case PUBLISHERS:
                 model.addAttribute("maxPage", pubTabMaxPageNumber);
                 model.addAttribute("thisPage", pubTabPageNumber);
                 model.addAttribute("pageSize", pubTabPageSize);
-                model.addAttribute("totalElements", pubTabTotalElements);
                 break;
         }
     }
@@ -201,25 +224,43 @@ public class CatalogsController {
 
         switch (currentTab) {
             case AUTHORS:
-                sortField = locale.equals("ru") ? "ruFio" : "enFio";
-                Page<AuthorEntity> pageAuth = authorService.getAll(authTabPageNumber - 1, authTabPageSize, sortField, Sort.Direction.ASC);
+                Page<AuthorEntity> pageAuth;
+                sortField = "ru".equals(locale) ? "ruFio" : "enFio";
+                if (keywords.isPresent()) {
+                    pageAuth = authorService.search(authTabPageNumber - 1, authTabPageSize, sortField, Sort.Direction.ASC, keywords.get());
+                    model.addAttribute("searchMess", String.format("Найдено: %d (Ключевые слова: '%s')", pageAuth.getTotalElements(), keywords.get()));
+                } else {
+                    pageAuth = authorService.getAll(authTabPageNumber - 1, authTabPageSize, sortField, Sort.Direction.ASC);
+                    model.addAttribute("searchMess", "Найдено: " + pageAuth.getTotalElements());
+                }
                 model.addAttribute("authors", pageAuth);
                 authTabMaxPageNumber = pageAuth.getTotalPages();
-                authTabTotalElements = pageAuth.getTotalElements();
                 break;
             case GENRES:
+                Page<GenreEntity> pageGen;
                 sortField = locale.equals("ru") ? "ruName" : "enName";
-                Page<GenreEntity> pageGen = genreService.getAll(genTabPageNumber - 1, genTabPageSize, sortField, Sort.Direction.ASC);
+                if (keywords.isPresent()) {
+                    pageGen = genreService.search(genTabPageNumber - 1, genTabPageSize, sortField, Sort.Direction.ASC, keywords.get());
+                    model.addAttribute("searchMess", String.format("Найдено: %d (Ключевые слова: '%s')", pageGen.getTotalElements(), keywords.get()));
+                } else {
+                    pageGen = genreService.getAll(genTabPageNumber - 1, genTabPageSize, sortField, Sort.Direction.ASC);
+                    model.addAttribute("searchMess", "Найдено: " + pageGen.getTotalElements());
+                }
                 model.addAttribute("genres", pageGen);
                 genTabMaxPageNumber = pageGen.getTotalPages();
-                genTabTotalElements = pageGen.getTotalElements();
                 break;
             case PUBLISHERS:
+                Page<PublisherEntity> pagePub;
                 sortField = locale.equals("ru") ? "enName" : "enName";
-                Page<PublisherEntity> pagePab = publisherService.getAll(pubTabPageNumber - 1, pubTabPageSize, sortField, Sort.Direction.ASC);
-                model.addAttribute("publishers", pagePab);
-                pubTabMaxPageNumber = pagePab.getTotalPages();
-                pubTabTotalElements = pagePab.getTotalElements();
+                if (keywords.isPresent()) {
+                    pagePub = publisherService.search(pubTabPageNumber - 1, pubTabPageSize, sortField, Sort.Direction.ASC, keywords.get());
+                    model.addAttribute("searchMess", String.format("Найдено: %d (Ключевые слова: '%s')", pagePub.getTotalElements(), keywords.get()));
+                } else {
+                    pagePub = publisherService.getAll(pubTabPageNumber - 1, pubTabPageSize, sortField, Sort.Direction.ASC);
+                    model.addAttribute("searchMess", "Найдено: " + pagePub.getTotalElements());
+                }
+                model.addAttribute("publishers", pagePub);
+                pubTabMaxPageNumber = pagePub.getTotalPages();
                 break;
         }
     }
